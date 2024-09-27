@@ -85,10 +85,15 @@ WSGI_APPLICATION = 'sabbor_andino.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'db-sabborandino',
+        'USER': 'admin',
+        'PASSWORD': 'sabborandino',
+        'HOST': 'db-sabborandino.cry8cyik69mw.us-east-2.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
+
 
 
 # Password validation
