@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Restaurantes{% endblock titulo %}
+
+{% block contenido %}
+<!-- Start Featured Product -->
+<section class="bg-light">
+    <div class="container py-5">
+        <div class="row  py-3">
+            <h1 class="h1 text-center text-success"> Restaurantes Destacados</h1>
+                <p class=" text-justify py-3">
+                  Descubre la gastronomía única de La Cocha, donde cada restaurante refleja la rica biodiversidad y las tradiciones culinarias de la región.
+                </p>
+            <div class="col-lg-6 m-auto">
+                
+            </div>
+        </div>
+        <div class="row">
+            {% for restaurante in restaurantes %}
+            <div class="col-12 col-md-4 col-lg-3 mb-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="h2 card-title text-success">{{ restaurante.nombre }}</h5>
+
+                    <img
+                      class="img-fluid d-flex mx-auto my-4"
+                      src="{{ restaurante.foto.url }}"
+                      alt="{{ restaurante.nombre }}"
+                    />
+                    <a href="{% url 'restaurante_detalle' restaurante.id %}" class="btn btn-success">Ver más</a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+        </div>
+        
+    </div>
+    
+    
+</section>
+
+<!-- End Featured Product -->
+
+
+{% endblock contenido %}

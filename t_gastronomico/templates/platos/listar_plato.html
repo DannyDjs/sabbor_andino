@@ -1,0 +1,67 @@
+{% extends "dashboard.html" %}
+
+{% block titulo %}listar plato{% endblock titulo %}
+
+{% block contenido %}
+
+<div class="content-wrapper">
+  <!-- Contenido -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Diseño Básico -->
+
+    <div class="col-xl">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Listado platos</h5>
+          <small class="text-muted float-end">Descripción del listado</small>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped">
+
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>foto</th>
+                <th>Video</th>
+                <th>precio</th>
+                <th>Opcion</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for Plato in platos  %}
+              <tr>
+                <td class="col-1">{{ Plato.id }}</td>
+                <td class="col-2">{{ Plato.nombre }}</td>
+                <td class="col-3">{{ Plato.descripcion }}</td>
+                <td><img src="{{ Plato.foto.url }}" height="50"></td>
+                {% if Plato.video %}
+                <!-- Verifica si el Plato tiene un video -->
+                <td><video width="100" height="60" controls>
+                    <source src="{{ Plato.video.url }}" type="video/mp4">
+                    Tu navegador no soporta la etiqueta de video.
+                  </video></td>
+                {% else %}
+                <td>No hay video</td>
+                {% endif %}
+                <td>{{ Plato.precio }}</td>
+                <td class="col-3">
+                  <a href="{% url 'editar_plato' Plato.id  %}" class="btn btn-primary">Editar</a>
+                  <a href="{% url 'eliminar_plato' Plato.id %}" class="btn btn-danger">Eliminar</a>
+                </td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock contenido %}

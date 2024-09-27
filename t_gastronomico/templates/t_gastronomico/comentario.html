@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block titulo %}comentarios{% endblock titulo %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-12">
+            
+            <div class="row"></div>
+            <div id="listaReseñas">
+                {% for reseña in resena %}
+                    <div class="row mb-3">
+                        <div class="col-1">
+                            <img class="rounded-circle" src="{{ reseña.turista.Tfoto.url }}" alt="{{ reseña.turista.user.username }}" width="64">
+                        </div>
+                        <div class="col-2">
+                            <h5 class="mt-0">{{ reseña.turista.user.username }}</h5>
+                            <p class="text-muted">{{ reseña.fecha|date:"Y-m-d H:i" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p>{{ reseña.comentario }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

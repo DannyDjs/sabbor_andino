@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block titulo %}Detalle Plato{% endblock titulo %}
+
+{% block contenido %}
+<!-- Open Content -->
+<section class="bg-light">
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3">
+                    <img class="card-img img-fluid" src="{{ plato.foto.url }}" alt="Card image cap" id="product-detail">
+                </div>
+
+            </div>
+            <!-- col end -->
+            <div class="col-lg-7 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h2">{{ plato.nombre }}</h1>
+                        <p class="py-2">
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-warning"></i>
+                            <i class="fa fa-star text-secondary"></i>
+                            
+                        </p>
+
+                        <h6>Ingredientes:</h6>
+                        <p>{{ plato.ingrediente }}</p>
+
+                        <h6>Preparacion:</h6>
+                        <p>{{ plato.instruccion }}</p>
+
+                        <h6>Video:</h6>
+                        {% if plato.video %}
+                        <!-- Verifica si el plato tiene un video -->
+                        <div style="height: 250px; width: 100%;">
+                            <video style="height: 250px; width: 100%;" controls>
+                                <source src="{{ plato.video.url }}" type="video/mp4">
+                            </video>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+
+</div>
+<!-- Close Content -->
+
+<div class="container">
+
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-12 mt-5">
+
+                <form id="comentarioForm" method="POST" data-url-agregar-resena="{% url 'agregar_resena' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea class="form-control" id="comentario" name="comentario"
+                            placeholder="Agrega un comentario ..." required></textarea>
+                    </div>
+                    <input type="hidden" id="restaurante" name="restaurante" value="{{ plato.restaurante.id }}">
+                    <input type="hidden" id="turista" name="turista" value="{{ request.user.turista.id }}">
+                    <input type="hidden" id="plato" name="plato" value="{{ plato.id }}">
+                    <button type="submit" id="enviar" class="btn btn-primary">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="listaComentarios">
+        <!-- Aquí se agregarán las nuevas reseñas -->
+    </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="row">
+                <div id="listaReseñas">
+                    {% for reseña in resena %}
+                    <div class="row mb-3">
+                        <div class="col-2">
+                            <img class="rounded-circle" src="{{ reseña.turista.Tfoto.url }}"
+                                alt="{{ reseña.turista.user.username }}" width="64">
+                        </div>
+                        <div class="col-2">
+                            <h5 class="mt-0">{{ reseña.turista.user.username }}</h5>
+                            <p class="text-muted">{{ reseña.fecha|date:"Y-m-d H:i" }}</p>
+                        </div>
+                        <div class="col-3">
+                            <p>{{ reseña.comentario }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}

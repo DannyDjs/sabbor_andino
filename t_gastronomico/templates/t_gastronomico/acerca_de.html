@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Acerca de la Cocha{% endblock titulo %}
+
+{% block contenido %}
+<div class="carousel slide" data-bs-ride="carousel">
+
+  <div class="container py-5">
+    <!-- Contenido sobre La Cocha -->
+
+    <main>
+      <h1 class="h1 text-success" style="text-align: center;">Descubre la Laguna de La Cocha</h1>
+      <section id="historia" class="py-5">
+        <h2 class="h2s text-success">Historia</h2>
+        <p style="text-align: justify;">La Laguna de La Cocha, ubicada en el departamento de Nariño en
+          Colombia,
+          tiene un origen glaciar y se formó hace aproximadamente 2 millones de años durante el
+          Pleistoceno.
+          Este cuerpo de agua, que cubre alrededor de 40 kilómetros cuadrados, ha sido un sitio de
+          importancia
+          histórica y cultural para las comunidades indígenas como los Pastos y los Quillacingas. La isla
+          La
+          Corota en el centro de la laguna es considerada sagrada por estas comunidades y alberga
+          vestigios
+          arqueológicos. Además, en 1540, el conquistador español Sebastián de Belalcázar cruzó la laguna
+          en
+          busca del "Dorado", dejando un legado histórico en la región. Esta laguna ha sido fundamental en
+          la
+          historia y cultura local, además de desempeñar un papel ecológico significativo como reserva
+          natural
+          de fauna y flora endémica.</p>
+
+      </section>
+
+      <section id="ecologia" class="">
+        <h2 class="h2s text-success">Ecología</h2>
+        <p style="text-align: justify;">La Laguna de La Cocha es un ecosistema de gran importancia ecológica
+          debido a su rica biodiversidad y su papel como hábitat para especies únicas y endémicas. Este cuerpo
+          de agua alberga una variedad de especies vegetales y animales adaptadas a su entorno de alta
+          montaña. Entre los aspectos destacados de su biodiversidad y su importancia ecológica se encuentran:
+
+        </p>
+
+        <div class="accordion mt-3" id="accordionExample">
+          <div class="card accordion-item active">
+            <h2 class="accordion-header" id="headingOne">
+              <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne"
+                aria-expanded="true" aria-controls="accordionOne">
+                <h4 class="h3 text-success">Flora</h4>
+              </button>
+            </h2>
+
+            <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                Los alrededores de la laguna están cubiertos por bosques andinos y
+                páramos, que son hábitats
+                importantes para especies como el frailejón (Espeletia spp.), el cedro (Cedrela montana), el arrayán
+                (Myrcianthes rhopaloides) y varias especies de orquídeas. Estas plantas juegan un papel crucial en
+                la regulación del agua y la conservación del suelo en la región.
+              </div>
+            </div>
+          </div>
+          <div class="card accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                data-bs-target="#accordionTwo" aria-expanded="false" aria-controls="accordionTwo">
+                <h4 class="h3 text-success">Fauna</h4>
+              </button>
+            </h2>
+            <div id="accordionTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                La laguna y sus alrededores son el hogar de una diversidad de especies
+                animales, incluyendo
+                aves acuáticas como la garza blanca (Ardea alba), el pato zambullidor (Oxyura jamaicensis) y el pato
+                paramuno (Anas andium), así como aves rapaces como el águila paramuna (Geranoaetus melanoleucus).
+                Otros animales presentes son el conejo silvestre (Sylvilagus brasiliensis), la musaraña de agua
+                (Chibchanomys orcesi) y especies de peces como la trucha arcoíris (Oncorhynchus mykiss).
+              </div>
+            </div>
+          </div>
+          <div class="card accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse"
+                data-bs-target="#accordionThree" aria-expanded="false" aria-controls="accordionThree">
+
+                <h4 class="h3 text-success">Endemismo</h4>
+              </button>
+            </h2>
+            <div id="accordionThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                La laguna y sus alrededores son hábitat de varias especies endémicas,
+                es decir, que se
+                encuentran exclusivamente en esta región. Estos incluyen anfibios como la rana andina (Telmatobius
+                marmoratus) y la ranita de cristal de La Cocha (Hyalinobatrachium fleischmanni), así como especies
+                de plantas adaptadas a las condiciones únicas del ecosistema andino.
+              </div>
+            </div>
+          </div>
+          <div class="card accordion-item">
+            <h2 class="accordion-header" id="headingFourt">
+              <button type="button" class="accordion-button collapsed text-success" data-bs-toggle="collapse"
+                data-bs-target="#accordion" aria-expanded="false" aria-controls="accordion">
+
+                <h4 class="h3 text-success">Conservación</h4>
+              </button>
+            </h2>
+            <div id="accordion" class="accordion-collapse collapse" aria-labelledby="headingThree"
+              data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                La Laguna de La Cocha y su entorno son reconocidos como un área
+                importante para la
+                conservación de la biodiversidad. La preservación de este ecosistema contribuye a mantener la
+                integridad de los servicios ecosistémicos, como la regulación del ciclo del agua y la conservación
+                de la diversidad genética de las especies presentes.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="como-llegar" class="py-5">
+        <h2 class="h2s text-success">Cómo Llegar</h2>
+        <!-- Inserta tu mapa interactivo aquí -->
+        <div class="container py-3">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15956.08662362785!2d-77.1692982896837!3d1.1450013850546759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e28d5a979572a81%3A0x4cf810b9bb240b98!2sEl%20encano!5e0!3m2!1ses!2sco!4v1715822532961!5m2!1ses!2sco"
+            width="100%" height="450" style="border:5px solid #4CAF50; border-radius: 10px;" allowfullscreen=""
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+
+</div>
+
+<footer>
+
+</footer>
+
+{% endblock contenido %}

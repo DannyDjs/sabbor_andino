@@ -1,0 +1,32 @@
+{% extends "dashboard.html" %}
+
+{% block titulo %}Eliminar evento{% endblock titulo %}
+{% block css %}{% endblock css %}
+
+{% block contenido %}
+<div class="content-wrapper">
+    <!-- Contenido -->
+  
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <!-- Diseño Básico -->
+      
+      <div class="col-xl">
+        <div class="card mb-4">
+            <h5 class="card-header">Eliminar evento</h5>
+    
+            <div class="card-body">
+    
+                <p>¿Estás seguro de que quieres eliminar el evento llamado "{{ evento.nombre }}"?</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar evento</button>
+                </form>
+            </div>
+            <!-- /Account -->
+          </div>
+      </div>
+    </div>
+  </div>
+{% endblock contenido %}
+{% block js %}{% endblock js %}

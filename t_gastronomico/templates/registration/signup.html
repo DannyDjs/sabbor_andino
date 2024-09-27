@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block titulo %}signup{% endblock titulo %}
+{% block contenido %}
+
+<!-- Content -->
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register Card -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+
+          <!-- /Logo -->
+          <h4 class="mb-2">La aventura comienza aquí 🚀</h4>
+          <p class="mb-4"> Haz que cada receta cuente con nuestra gestión simple y divertida</p>
+
+          <form id='registrar1' action="" method="POST" enctype="multipart/form-data">
+            {% load widget_tweaks %}
+            {% csrf_token %}
+            <div class="mb-3">
+              <div class="mb-3">
+                {% for field in user_form %}
+                {{field.label_tag}}
+                {% render_field field class+="form-control" %}
+                {% endfor %}
+
+                <!-- Selector de tipo de usuario -->
+                <label for="userType" class="form-label">Tipo de usuario</label>
+                <select class="form-control" id="userType" name="user_type">
+                  <option value="">Selecciona una opción</option>
+                  <option value="turista">Turista</option>
+                  <option value="restaurante">Restaurante</option>
+                </select>
+
+                <!-- Formulario para Turista -->
+                <div id="turistaForm" style="display:none;">
+                  <!-- Campos específicos de turista -->
+                  {% csrf_token %}
+                  {% for field in turista_form %}
+                  {{field.label_tag}}
+                  {% render_field field class+="form-control" %}
+                  {% endfor %}
+                </div>
+
+                <!-- Formulario para Restaurante -->
+                <div id="restauranteForm" style="display:none;">
+                  <!-- Campos específicos de restaurante -->
+                  {% csrf_token %}
+
+                  <!-- Ejemplo de integración con Geolocalización -->
+
+                  {% for field in restaurante_form %}
+                  <div class="form-group">
+                    {{ field.label_tag }}
+                    {% if field.name == 'ubicacion' %}
+                    <button type="button" onclick="obtenerUbicacion()" class="btn btn-primary d-grid w-100">Obtener
+                      Ubicación Actual</button>
+                    <input type="hidden" name="ubicacion" id="ubicacion">
+                    <div id="map" style="height: 180px;"></div>
+                    {% else %}
+                    {% render_field field class+="form-control" %}
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+
+                  {{ restaurante_form.ubicacion }}
+
+                </div>
+
+              </div>
+              <button id="submitButton" class="btn btn-primary d-grid w-100">Registrarse</button>
+          </form>
+
+          <p class="text-center">
+            <span>¿Ya tienes una cuenta?</span>
+            <a href="{% url "login" %}">
+              <span>Iniciar sesion</span>
+            </a>
+          </p>
+        </div>
+      </div>
+      <!-- Register Card -->
+    </div>
+  </div>
+</div>
+
+<!-- / Content -->
+<script>
+  document.getElementById('submitButton').addEventListener('click', function(event) {
+    var userType = document.getElementById('userType').value;
+    var form = document.getElementById('registrar1');
+    if (userType === '') {
+      event.preventDefault();
+      alert('Por favor, selecciona un tipo de usuario.');
+    } else {
+      form.submit();
+    }
+  });
+</script>
+
+<script>
+  document.getElementById('userType').addEventListener('change', function() {
+    var selection = this.value;
+    var turistaForm = document.getElementById('turistaForm');
+    var restauranteForm = document.getElementById('restauranteForm');
+    turistaForm.style.display = 'none';
+    restauranteForm.style.display = 'none';
+    if (selection === 'turista') {
+      turistaForm.style.display = 'block';
+    } else if (selection === 'restaurante') {
+      restauranteForm.style.display = 'block';
+    }
+  });
+</script>
+
+<!-- Ejemplo de integración con Geolocalización -->
+<script>
+  function obtenerUbicacion() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var lat = position.coords.latitude.toFixed(6);
+        var lng = position.coords.longitude.toFixed(6);
+        var ubicacion = JSON.stringify({
+          'latitud': lat,
+          'longitud': lng
+        });
+        document.getElementById('ubicacion').value = ubicacion;
+        // Mostrar la ubicación en un mapa (por ejemplo, Leaflet)
+        var map = L.map('map').setView([lat,lng], 15);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+         }).addTo(map);
+          L.marker([lat, lng]).addTo(map);
+      });
+    } else {
+      alert('Tu navegador no soporta la geolocalización.');
+    }
+  }
+</script>
+
+{% endblock contenido %}

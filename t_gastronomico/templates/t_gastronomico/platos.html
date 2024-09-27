@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Platos tipicos{% endblock titulo %}
+
+{% block contenido %}
+<!-- Start Featured Product -->
+<section class="bg-light">
+    <div class="container py-5">
+        <div class="row  py-3">
+            <h1 class="h1 text-center text-success"> Explorando los Sabores de la Laguna de La Cocha</h1>
+            <p class=" text-justify py-3">
+                Descubre la gastronomía única de La Cocha, donde cada plato refleja la rica biodiversidad y las
+                tradiciones culinarias de la región. Explora nuestra selección de recetas locales, desde truchas frescas
+                hasta platos ancestrales, y participa calificando cada experiencia.
+            </p>
+            <div class="col-lg-6 m-auto">
+
+            </div>
+        </div>
+
+        <div class="row">
+            {% for plato in platos %}
+            <div class="col-12 col-md-3 mb-4">
+                <div class="card h-100" style="border:3px solid #4CAF50; border-radius: 10px;">
+                    <a href="{% url 'plato_detalle' plato.id %}">
+                        <img src="{{ plato.foto.url }}" class="card-img-top " alt="{{ plato.nombre }}" >
+                        
+                    </a>
+                    <div class="card-body">
+                        
+                            <ul class="list-unstyled d-flex justify-content-between">
+                                <li>
+                                    <div class="star-rating">
+                                        <span class="text-muted fa fa-star" data-rating="1"></span>
+                                        <span class="text-muted fa fa-star" data-rating="2"></span>
+                                        <span class="text-muted fa fa-star" data-rating="3"></span>
+                                        <span class="text-muted fa fa-star" data-rating="4"></span>
+                                        <span class="text-muted fa fa-star" data-rating="5"></span>
+                                        <input type="hidden" name="rating" class="rating-value" value="0">
+                                        <input type="hidden" name="turista_id" class="turista-id"
+                                            value="{{ request.user.turista.id }}">
+                                        <input type="hidden" name="plato_id" class="plato-id" value="{{ plato.id }}">
+                                        <input type="hidden" name="restaurante_id" class="restaurante-id"
+                                            value="{{ plato.restaurante.id }}">
+                                    </div>
+                                </li>
+                                <li class="text-muted text-right">${{ plato.precio }}</li>
+                            </ul>
+                            <a class="h2 text-decoration-none text-dark">{{ plato.nombre }}</a>
+                            
+                            <p class="text-muted">Reseñas (24)</p>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+
+<!-- End Featured Product -->
+
+
+
+{% endblock contenido %}

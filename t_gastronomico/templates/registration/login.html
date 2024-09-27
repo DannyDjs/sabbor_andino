@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}Login{% endblock titulo %}
+
+{% block contenido %}
+
+{% block formulario %}
+<div class="container-xxl">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner">
+      <!-- Register -->
+      <div class="card">
+        <div class="card-body">
+          <!-- Logo -->
+          <div class="text-center mb-4">
+            <img src="{% static 'img/iconoSaborAndino.png' %}" alt="Logo" class="img-fluid" style="max-width: 90px;">
+          </div>
+          <!-- /Logo -->
+          <h4 class="mb-2 text-center">Bienvenid@ a Saboor Andino</h4>
+          <!-- <p class="mb-4">Inicia sesión y despierta tus sentidos con cada plato.</p> -->
+          
+          <form id="formAuthentication" class="mb-3" action="{% url "login" %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="{{form.username.id_for_label}}" class="form-label">Usuario</label>
+              <input type="text" class="form-control" id="email" name="{{form.username.name}}"
+                placeholder="Introduce tu Usuario" autofocus />
+              <span>{{form.username.errors}}</span>
+            </div>
+            <div class="mb-3 form-password-toggle">
+              <div class="d-flex justify-content-between">
+                <label class="form-label" for="{{form.password.id_for_label}}">Contraseña</label>
+              </div>
+              <div class="input-group input-group-merge">
+                <input type="password" id="password" class="form-control" name="{{form.password.name}}"
+                  placeholder="Introduce tu contraseña"
+                  aria-describedby="password" />
+              </div>
+              <span><i class="bx bx-hide">{{form.password.errors}}</i></span>
+            </div>
+            <div class="mb-3">
+              <button class="btn btn-primary d-grid w-100" type="submit">Iniciar sesion</button>
+            </div>
+          </form>
+
+          <p class="text-center">
+            <span>¿Nuev@ en nuestra plataforma?</span>
+            <a href="{% url "signup" %}">
+              <span>Crea una cuenta</span>
+            </a>
+          </p>
+        </div>
+      </div>
+      <!-- /Register -->
+    </div>
+  </div>
+</div>
+
+<!-- / Content -->
+
+{% endblock formulario %}
+
+{% endblock contenido %}

@@ -1,0 +1,37 @@
+{% extends "dashboard.html" %}
+
+{% block titulo %}Eliminar Plato{% endblock titulo %}
+
+{% block contenido %}
+
+<div class="content-wrapper">
+  <!-- Contenido -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    
+
+    <!-- Diseño Básico -->
+    
+    <div class="col-xl">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Eliminar plato</h5>
+          <small class="text-muted float-end">...</small>
+        </div>
+        <div class="card-body">
+
+        <form method="POST" action="{% url 'eliminar_plato' eliminar.id %}">
+            {% csrf_token %}
+            <input type="submit" value="Eliminar">
+        </form>
+        
+        <a href="{% url 'listar_plato' %}" class="btn btn-danger">Cancelar</a> <!-- Reemplaza 'nombre_de_la_vista' con el nombre de la vista a la que deseas redirigir si se cancela la eliminación -->
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock contenido %}
