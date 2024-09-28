@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    't_gastronomico.apps.TGastronomico',
+    't_gastronomico.apps.TGastronomicoConfig',
     'widget_tweaks',
     'rest_framework',
     'rest_framework.authtoken',
