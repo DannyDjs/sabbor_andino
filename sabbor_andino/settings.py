@@ -135,7 +135,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'app', 'static', 'app')
+    os.path.join(BASE_DIR, 't_gastronomico', 'static', 't_gastronomico')
 ]
 
 MEDIA_URL = '/media/'
