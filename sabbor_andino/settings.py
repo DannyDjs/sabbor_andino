@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-wyv1#-z7@e(4l7c-e7a_sh)pdtern#=-q4rg@jr3)&6638kt=i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['saboorandino.online','www.saboorandino.online']
+ALLOWED_HOSTS = ['saboorandino.online','www.saboorandino.online','127.0.0.1','54.236.187.36']
 
 
 # Application definition
