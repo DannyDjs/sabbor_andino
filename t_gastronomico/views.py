@@ -184,15 +184,22 @@ def logout(request):
     return redirect("login")
 
 def signup(request):
+    # Inicializa los formularios fuera de los bloques condicionales
+    user_form = UserCreationForm()
+    turista_form = TuristaForm()
+    restaurante_form = RestauranteForm()
+
     if request.method == 'POST':
         print(request.POST)
         user_form = UserCreationForm(request.POST)
+
         if user_form.is_valid():
             # Guardar el usuario
             user = user_form.save()
             # Obtener el tipo de usuario seleccionado
             user_type = request.POST.get('user_type')
             print(f"Tipo de usuario seleccionado: {user_type}")
+
             if user_type == 'turista':
                 turista_form = TuristaForm(request.POST, request.FILES)
                 if turista_form.is_valid():
@@ -203,6 +210,7 @@ def signup(request):
                     print("Turista registrado correctamente")
                 else:
                     print(turista_form.errors)
+            
             elif user_type == 'restaurante':
                 restaurante_form = RestauranteForm(request.POST, request.FILES)
                 if restaurante_form.is_valid():
@@ -242,17 +250,12 @@ def signup(request):
 
             return redirect('login')  # Redirigir a la vista de login después del registro
 
-    else:
-        user_form = UserCreationForm()
-        turista_form = TuristaForm()
-        restaurante_form = RestauranteForm()
-
+    # Renderiza la plantilla con los formularios
     return render(request, 'registration/signup.html', {
         'user_form': user_form,
         'turista_form': turista_form,
-        'restaurante_form': restaurante_form
+        'restaurante_form': restaurante_form,
     })
-
 
 def base(request):
     # Lógica para la vista base
