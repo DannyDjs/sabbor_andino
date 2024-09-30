@@ -268,11 +268,11 @@ def error(request):
 
 def acerca_de(request):
     # Lógica para la vista acerca_de
-    return render(request, "app/acerca_de.html")
+    return render(request, "t_gastronomico/acerca_de.html")
 
 def contacto(request):
     # Lógica para la vista contacto
-    return render(request, "app/contacto.html")
+    return render(request, "t_gastronomico/contacto.html")
 
 
 #inicio de sesion Turista
@@ -298,7 +298,7 @@ def index_turista(request):
 @login_required
 def restaurantes(request):
     restaurantes = Restaurante.objects.all()  # Obtén todos los platos  
-    return render(request, "app/restaurantes.html", {'restaurantes': restaurantes})
+    return render(request, "t_gastronomico/restaurantes.html", {'restaurantes': restaurantes})
 
 @login_required
 def restaurante_detalle(request, restaurante_id):
@@ -306,18 +306,18 @@ def restaurante_detalle(request, restaurante_id):
     
     plato = Plato.objects.filter(restaurante=restaurante)
     
-    return render(request, "app/restaurante_detalle.html", {'restaurante': restaurante, 'plato': plato})
+    return render(request, "t_gastronomico/restaurante_detalle.html", {'restaurante': restaurante, 'plato': plato})
 
 @login_required
 def platos(request):
     platos = Plato.objects.all()  # Obtén todos los platos  
-    return render(request, 'app/platos.html', {'platos': platos})
+    return render(request, 't_gastronomico/platos.html', {'platos': platos})
 
 @login_required
 def plato_detalle(request, plato_id):
     plato = get_object_or_404(Plato, id=plato_id)
     resenas = plato.reseña_set.filter(calificacion__isnull=True).order_by('-fecha')
-    return render(request, 'app/plato_detalle.html', {'plato': plato, 'resena': resenas})
+    return render(request, 't_gastronomico/plato_detalle.html', {'plato': plato, 'resena': resenas})
 
 @login_required
 @csrf_exempt
@@ -395,7 +395,7 @@ def obtener_eventos(request):
 
 @login_required
 def eventos (request):
-    return render(request, "app/eventos.html")
+    return render(request, "t_gastronomico/eventos.html")
 
 #inicio de sesion Restaurante
 
@@ -688,11 +688,11 @@ def buscar_dashboard(request):
 
 def historia(request):
     # Lógica para la vista historia
-    return render(request, "app/historia.html")
+    return render(request, "t_gastronomico/historia.html")
 
 def cultura(request):
     # Lógica para la vista cultura
-    return render(request, "app/cultura.html")
+    return render(request, "t_gastronomico/cultura.html")
 
 
 @login_required
