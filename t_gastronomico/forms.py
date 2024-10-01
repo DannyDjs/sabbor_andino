@@ -28,6 +28,14 @@ class TuristaForm(forms.ModelForm):
                   'Tcelular', 
                   'Tfoto'
                   ]
+        labels = {
+            'Tnombre': 'Nombre',
+            'Tapellido': 'Apellido',
+            'Tcorreo': 'Correo electrónico',
+            'Tcelular': 'Número de celular',
+            'Tfoto': 'Foto de perfil',
+        }
+        
     widgets = {
             'Tnombre': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
             'Tapellido': forms.TextInput(attrs={'class': 'form-control'}),
