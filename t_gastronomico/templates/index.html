@@ -32,12 +32,12 @@
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="{% static 'img/index/carusel1.jpg' %} " alt="">
+                        <img class="img-fluid" src="{% static 'img/index/carusel1.jpg' %}" alt="">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left align-self-center">
                             <h1 class="h1 text-success">Bienvenido a La Cocha</h1>
-                            <h3 class="h2 text-success ">Sumérgete en una experiencia gastronómica y descubre los sabores únicos de nuestra región.</h3>
+                            <h3 class="h2 text-success">Sumérgete en una experiencia gastronómica y descubre los sabores únicos de nuestra región.</h3>
                             <p>
                                 "Bienvenido a la Laguna de la Cocha, un paraíso natural donde la belleza paisajística se fusiona con la riqueza culinaria. 
                                 En nuestra página web, te invitamos a explorar los deliciosos secretos que guarda nuestra región en cada bocado. 
@@ -54,12 +54,12 @@
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="{% static 'img/index/carusel2.jpg' %} " alt="">
+                        <img class="img-fluid" src="{% static 'img/index/carusel2.jpg' %}" alt="">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
-                            <h1 class="h1 text-success "> "Los Aromas de la Tradición en la Mesa"</h1>
-                            <h3 class="h2 text-success"> "Descubre la esencia de nuestra cultura a través de la gastronomía."</h3>
+                            <h1 class="h1 text-success">"Los Aromas de la Tradición en la Mesa"</h1>
+                            <h3 class="h2 text-success">"Descubre la esencia de nuestra cultura a través de la gastronomía."</h3>
                             <p>
                                 Sumérgete en una experiencia culinaria que te conecta con nuestras raíces ancestrales. 
                                 En la Laguna de la Cocha, cada comida es una celebración de la historia y la tradición de nuestra comunidad. 
@@ -75,7 +75,7 @@
             <div class="container">
                 <div class="row p-5">
                     <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
-                        <img class="img-fluid" src="{% static 'img/index/carusel3.jpg' %} " alt="">
+                        <img class="img-fluid" src="{% static 'img/index/carusel3.jpg' %}" alt="">
                     </div>
                     <div class="col-lg-6 mb-0 d-flex align-items-center">
                         <div class="text-align-left">
@@ -101,19 +101,44 @@
     </a>
 </div>
 
-<section id="galeria" class="section">
+<!-- Galería de Imágenes -->
+<section id="galeria" class="py-5">
     <div class="container">
-        <h2>Galería de Fotos</h2>
-        <p>Comparte tus fotos gastronómicas y conecta con la comunidad.</p>
-        <div class="galeria-fotos"></div>
+        <h2 class="text-center text-success ">Galería de Imágenes</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{% static 'img/plato1.jpg' %}" class="img-fluid mb-3" alt="Plato 1">
+            </div>
+            <div class="col-md-4">
+                <img src="{% static 'img/plato2.jpg' %}" class="img-fluid mb-3" alt="Plato 2">
+            </div>
+            <div class="col-md-4">
+                <img src="{% static 'img/plato3.jpg' %}" class="img-fluid mb-3" alt="Plato 3">
+            </div>
+        </div>
     </div>
 </section>
-<!-- End Banner Hero -->
+
+<!-- Tradiciones Gastronómicas -->
+<section id="tradiciones" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center text-success mb-4">Tradiciones Gastronómicas</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <p>En la Laguna de la Cocha, la gastronomía no es solo un placer, sino una tradición rica y vibrante que ha pasado de generación en generación. Los platos típicos, como las diferentes preparaciones de la trucha arcoiris, son elaborados con ingredientes frescos y métodos tradicionales que resaltan la historia y la cultura de nuestra región.</p>
+                <p>Las festividades, como el Festival de la Trucha, son momentos perfectos para disfrutar de la comida típica, compartir con la comunidad y mantener vivas las costumbres locales.</p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'img/tradiciones.jpg' %}" class="img-fluid rounded" style="width: 60%;" alt="Tradiciones Gastronómicas de la Laguna de la Cocha">
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
 <div class="col-12 mb-3">
     <div class="w-100 my-3 border-top border-light"></div>
 </div>
 
 {% endblock contenido %}
-
-

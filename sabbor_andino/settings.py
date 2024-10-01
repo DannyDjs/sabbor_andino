@@ -88,8 +88,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'db_sabborandino',
         'USER': 'admin',  # Cambia esto por tu usuario
+        #'USER': 'root',  # Cambia esto por tu usuario
         'PASSWORD': 'sabborandino',  # Cambia esto por tu contraseña
-        'HOST': 'db-sabborandino.crooga6kwiil.us-east-1.rds.amazonaws.com',  # Tu endpoint de RDS
+        'HOST': 'db-sabborandino.crooga6kwiil.us-east-1.rds.amazonaws.com',
+        #'HOST': 'localhost',
         'PORT': '3306',
     }
 }

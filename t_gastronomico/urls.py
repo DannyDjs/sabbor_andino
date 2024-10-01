@@ -28,7 +28,7 @@ urlpatterns = [
     path("acerca_de/", views.acerca_de, name="acerca_de"),
     path("cultura/", views.cultura, name="cultura"),
     path("historia/", views.historia, name="historia"),
-    path("contacto/", views.contacto, name="contacto"),
+    path("app/", views.app, name="app"),
     path("error/", views.error, name="error"),
     
     path("signup/", views.signup, name="signup"),

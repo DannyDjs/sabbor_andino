@@ -273,9 +273,9 @@ def acerca_de(request):
     # Lógica para la vista acerca_de
     return render(request, "t_gastronomico/acerca_de.html")
 
-def contacto(request):
+def app(request):
     # Lógica para la vista contacto
-    return render(request, "t_gastronomico/contacto.html")
+    return render(request, "t_gastronomico/app.html")
 
 
 #inicio de sesion Turista
