@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-wyv1#-z7@e(4l7c-e7a_sh)pdtern#=-q4rg@jr3)&6638kt=i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['saboorandino.online','www.saboorandino.online','127.0.0.1','52.90.200.85']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -86,12 +86,12 @@ WSGI_APPLICATION = 'sabbor_andino.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_sabborandino',
-        'USER': 'admin',  # Cambia esto por tu usuario
-        #'USER': 'root',  # Cambia esto por tu usuario
-        'PASSWORD': 'sabborandino',  # Cambia esto por tu contraseña
-        'HOST': 'db-sabborandino.crooga6kwiil.us-east-1.rds.amazonaws.com',
-        #'HOST': 'localhost',
+        'NAME': 'db-sabborandino',
+        #'USER': 'admin',  # Cambia esto por tu usuario
+        'USER': 'root',  # Cambia esto por tu usuario
+        'PASSWORD': '',  # Cambia esto por tu contraseña
+        #'HOST': 'db-sabborandino.crooga6kwiil.us-east-1.rds.amazonaws.com',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
