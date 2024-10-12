@@ -25,10 +25,9 @@
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://www.saboorandino.online//login/</loc>
+        <loc>https://www.saboorandino.online/login/</loc>
         <lastmod>2024-10-01</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
-    <!-- Agrega más URLs aquí -->
 </urlset>
