@@ -1,4 +1,6 @@
 import json
+from decimal import Decimal
+import pytz
 from PIL import Image
 from io import BytesIO
 from django.http import HttpResponse
@@ -25,7 +27,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from .serializers import UserSerializer,PlatoSerializer,RestauranteSerializer,EventoGastronomicoSerializer,TuristaSerializer,ReseñaSerializer
 from .models import Plato,Restaurante,Turista,Reseña,EventoGastronomico,User,Turista
-from .forms import RestauranteForm, TuristaForm,EventoGastronomicoForm
+from .forms import CustomUserCreationForm, PlatoForm, RestauranteForm, TuristaForm,EventoGastronomicoForm
 from rest_framework.parsers import MultiPartParser, FormParser
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -41,24 +43,19 @@ class CustomAuthToken(ObtainAuthToken):
         # Obtenemos el nombre de usuario y la contraseña validados
         username = serializer.validated_data['username']
         password = serializer.validated_data['password']
-
         # Autenticamos al usuario
         user = authenticate(username=username, password=password)
-        
         if user is None:
             # Si las credenciales son inválidas
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
-
         # Verificamos si el usuario tiene un perfil de turista
         try:
             turista = Turista.objects.get(user=user)
         except Turista.DoesNotExist:
             # Si el usuario no es un turista, devolver un error
             return Response({'error': 'Access denied: Only tourists can log in.'}, status=status.HTTP_403_FORBIDDEN)
-
         # Si es un turista, obtenemos o creamos el token
         token, created = Token.objects.get_or_create(user=user)
-
         # Devolvemos la respuesta con el token y los detalles del usuario
         return Response({
             'token': token.key,
@@ -106,14 +103,11 @@ class TuristaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Obtener el queryset de todos los turistas
         queryset = Turista.objects.all()
-
         # Obtener el user_id desde los parámetros de la solicitud
         user_id = self.request.query_params.get('user_id', None)
-
         # Filtrar el queryset si el user_id es proporcionado
         if user_id is not None:
             queryset = queryset.filter(user_id=user_id)
-
         # Retornar el queryset filtrado
         return queryset
     
@@ -134,15 +128,13 @@ class ReseñaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Reseña.objects.all()
         plato_id = self.request.query_params.get('plato_id', None)
-        
         # Filtrar comentarios que no son nulos o vacíos
         queryset = queryset.exclude(comentario__isnull=True).exclude(comentario__exact='')
-        
         if plato_id is not None:
             queryset = queryset.filter(plato_id=plato_id)
         return queryset
     
-#autenticacion
+#####################################################                              AUTENTICACION                             #############################################
 
 def login(request):
     if request.method == "POST":
@@ -151,123 +143,91 @@ def login(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
-            
             if user is not None:
                 auth_login(request, user)
-                
                 # Verificar si el usuario es turista o restaurante
                 if hasattr(user, 'turista'):
                     # Usuario vinculado a un turista
                     request.session['user_type'] = 'turista'  # Agregar variable de sesión
                     return redirect("index")  # Redirigir a la página 'home' para turistas
-                
                 elif hasattr(user, 'restaurante'):
                     restaurante =user.restaurante
                     # Usuario vinculado a un restaurante
                     request.session['user_type'] = 'restaurante'  # Agregar variable de sesión
                     request.session['restaurante_nombre'] = restaurante.nombre
                     request.session['restaurante_foto_url'] = restaurante.foto.url
-                    return redirect("index_dashboard")  # Redirigir a la página 'dashboard' para restaurantes
-
+                    return redirect("dashboard")  # Redirigir a la página 'dashboard' para restaurantes
     else:
         form = AuthenticationForm()
-    
     return render(request, "registration/login.html", {"form": form})
 
 def logout(request):
     # Eliminar la variable de sesión 'user_type'
     if 'user_type' in request.session:
         del request.session['user_type']
-        
     auth_logout(request)
     # Redirige al usuario a la página de inicio o login tras cerrar sesión
     return redirect("login")
 
 def signup(request):
-    # Inicializa los formularios fuera de los bloques condicionales
     user_form = UserCreationForm()
     turista_form = TuristaForm()
     restaurante_form = RestauranteForm()
-
     if request.method == 'POST':
-        print(request.POST)
-        user_form = UserCreationForm(request.POST)
-
+        user_form = CustomUserCreationForm(request.POST)
         if user_form.is_valid():
-            # Guardar el usuario
             user = user_form.save()
-            # Obtener el tipo de usuario seleccionado
-            user_type = request.POST.get('user_type')
-            print(f"Tipo de usuario seleccionado: {user_type}")
-
+            user_type = user_form.cleaned_data.get('user_type')
+            # Redirigir a la página de completar el perfil según el tipo de usuario
             if user_type == 'turista':
-                turista_form = TuristaForm(request.POST, request.FILES)
-                if turista_form.is_valid():
-                    # Guardar el perfil de turista y asociarlo con el usuario
-                    turista = turista_form.save(commit=False)
-                    turista.user = user  # Asociar con el usuario creado
-                    turista.save()
-                    print("Turista registrado correctamente")
-                else:
-                    print(turista_form.errors)
-            
+                Turista.objects.create(user=user, Tnombre=user.username)
+                return redirect('complete_turista', user_id=user.id)
             elif user_type == 'restaurante':
-                restaurante_form = RestauranteForm(request.POST, request.FILES)
-                if restaurante_form.is_valid():
-                    # Guardar el perfil de restaurante y asociarlo con el usuario
-                    restaurante = restaurante_form.save(commit=False)
-                    restaurante.user = user  # Asociar con el usuario creado
-
-                    # Procesar el campo de ubicación
-                    ubicacion = request.POST.get('ubicacion')
-                    print(f"Ubicación recibida: {ubicacion}")  # Verifica que se recibe la ubicación
-                    if ubicacion:
-                        try:
-                            ubicacion_data = json.loads(ubicacion)
-                            restaurante.ubicacion = ubicacion_data
-                        except json.JSONDecodeError:
-                            print("Error al decodificar el campo de ubicación")
-                    
-                    # Obtener la imagen del formulario
-                    imagen = restaurante_form.cleaned_data.get('foto')
-                    print(f"Imagen: {imagen}")
-                    if imagen is not None:  # Verifica si se seleccionó un archivo
-                        # Abre la imagen y la redimensiona
-                        img = Image.open(imagen)
-                        img = img.resize((300, 300), Image.LANCZOS)
-                        if img.mode in ('RGBA', 'P'):  # Añade 'RGBA' a la lista
-                            img = img.convert('RGB')
-                        # Guarda la imagen redimensionada en un objeto BytesIO
-                        thumb_io = BytesIO()
-                        img.save(thumb_io, format='JPEG')
-                        # Crea un nuevo Django File con la imagen redimensionada
-                        imagen.file = File(thumb_io, name=imagen.name)
-                    
-                    restaurante.save()
-                    print("Restaurante registrado correctamente")
-                else:
-                    print(restaurante_form.errors)
-
-            return redirect('login')  # Redirigir a la vista de login después del registro
-
-    # Renderiza la plantilla con los formularios
-    return render(request, 'registration/signup.html', {
+                Restaurante.objects.create(user=user, nombre=user.username)
+                return redirect('complete_restaurante', user_id=user.id)
+    else:
+        user_form = CustomUserCreationForm()
+    context={
         'user_form': user_form,
         'turista_form': turista_form,
-        'restaurante_form': restaurante_form,
-    })
+        'restaurante_form': restaurante_form
+    }
+    return render(request, 'registration/signup.html', context)
 
-def base(request):
-    # Lógica para la vista base
-    return render(request, "base.html")
-# inicio de pagina general
+def complete_turista(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        turista_form = TuristaForm(request.POST, request.FILES)
+        if turista_form.is_valid():
+            turista = turista_form.save(commit=False)
+            turista.user = user
+            turista.save()
+            return redirect('app')  # Redirigir a donde prefieras una vez completado
+    else:
+        turista_form = TuristaForm()
+    return render(request, 't_gastronomico/complete_turista.html', {'turista_form': turista_form})
+    
+def complete_restaurante(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        restaurante_form = RestauranteForm(request.POST, request.FILES)
+        if restaurante_form.is_valid():
+            restaurante = restaurante_form.save(commit=False)
+            restaurante.user = user
+            restaurante.save()
+            return redirect('dashboard')  # Redirigir a donde prefieras una vez completado
+    else:
+        restaurante_form = RestauranteForm()
+    return render(request, 't_gastronomico/complete_restaurante.html', {'restaurante_form': restaurante_form})
+
+
+#####################################################                              LANDING PAGES                          ################################################
+
+def error (request):
+    return render(request, "error.html")
 
 def index(request):
-    return render(request, "index.html")
-@login_required
-def error(request):
-    # Lógica para la vista error
-    return render(request, "error.html")
+    return render(request, "t_gastronomico/index.html")
 
 def acerca_de(request):
     # Lógica para la vista acerca_de
@@ -278,7 +238,8 @@ def app(request):
     return render(request, "t_gastronomico/app.html")
 
 
-#inicio de sesion Turista
+#####################################################                              TURISTA                              #################################################
+
 @login_required
 def buscar(request):
     query = request.GET.get('q', '')
@@ -306,9 +267,7 @@ def restaurantes(request):
 @login_required
 def restaurante_detalle(request, restaurante_id):
     restaurante = get_object_or_404(Restaurante, id=restaurante_id)
-    
     plato = Plato.objects.filter(restaurante=restaurante)
-    
     return render(request, "t_gastronomico/restaurante_detalle.html", {'restaurante': restaurante, 'plato': plato})
 
 @login_required
@@ -335,29 +294,37 @@ def calificacion(request):
             turista = get_object_or_404(Turista, id=turista_id)
             plato = get_object_or_404(Plato, id=plato_id)
             restaurante = get_object_or_404(Restaurante, id=restaurante_id)
-        
             # Crear y guardar la reseña en la base de datos
             reseña = Reseña(calificacion=rating, turista=turista, plato=plato, restaurante=restaurante)
             reseña.save()
-            
             return JsonResponse({'status': 'success'})
-        
         except Turista.DoesNotExist:
             return JsonResponse({'error': 'Turista no encontrado'}, status=404)
-        
         except Plato.DoesNotExist:
             return JsonResponse({'error': 'Plato no encontrado'}, status=404)
-        
         except Restaurante.DoesNotExist:
             return JsonResponse({'error': 'Restaurante no encontrado'}, status=404)
-        
         except Exception as e:
             # Manejar cualquier otra excepción inesperada
             return JsonResponse({'error': str(e)}, status=500)
-    
     else:
         return JsonResponse({'error': 'Método no permitido.'}, status=405)
     
+@login_required
+def eventos (request):
+    return render(request, "t_gastronomico/eventos.html")
+
+@login_required  
+def obtener_eventos(request):
+    eventos = EventoGastronomico.objects.all()
+    eventos_list = [{
+        'title': evento.nombre,
+        'description': evento.descripcion,
+        'start': evento.fecha_inicio.isoformat(),
+        'end': evento.fecha_fin.isoformat()
+    } for evento in eventos]
+    return JsonResponse(eventos_list, safe=False)
+
 @login_required
 def agregar_resena(request):
     if request.method == "POST":
@@ -374,6 +341,9 @@ def agregar_resena(request):
         )
         nueva_resena.save()
 
+        # Convertir la fecha a la zona horaria de Bogotá
+        bogota_tz = pytz.timezone('America/Bogota')
+        fecha_bogota = nueva_resena.fecha.astimezone(bogota_tz)
         # Devuelve los datos del nuevo comentario en formato JSON
         return JsonResponse({
             'comentario': nueva_resena.comentario,
@@ -381,35 +351,16 @@ def agregar_resena(request):
                 'nombre': request.user.username,
                 'Tfoto': request.user.turista.Tfoto.url,
             },
-            'fecha': nueva_resena.fecha.strftime('%Y-%m-%d %H:%M:%S')
+            'fecha': fecha_bogota.strftime('%Y-%m-%d %H:%M')
         })
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
 
-@login_required  
-def obtener_eventos(request):
-    eventos = EventoGastronomico.objects.all()
-    eventos_list = [{
-        'title': evento.nombre,
-        'description': evento.descripcion,
-        'start': evento.fecha_inicio.isoformat(),
-        'end': evento.fecha_fin.isoformat()
-    } for evento in eventos]
-    return JsonResponse(eventos_list, safe=False)
-
-@login_required
-def eventos (request):
-    return render(request, "t_gastronomico/eventos.html")
-
-#inicio de sesion Restaurante
+#####################################################                              RESTAURANTE                               #############################################    
 
 @login_required
 def dashboard(request):
-    # Lógica para la vista dashboard
-    return render(request, 'index_dashboard.html')
-
-@login_required
-def index_dashboard(request):
-    # Lógica para la vista dashboard
+    # Lógica para la vista dashboar
     if request.user.is_authenticated:
         try:
             restaurante = Restaurante.objects.get(user=request.user)
@@ -425,8 +376,7 @@ def index_dashboard(request):
                 'cantidad_calificaciones': cantidad_calificaciones,
                 'cantidad_comentarios': cantidad_comentarios,
             }
-            
-            return render(request, 'index_dashboard.html', context)
+            return render(request, 'restaurante/dashboard.html', context)
         except Restaurante.DoesNotExist:
             return redirect('login')
     else:
@@ -438,28 +388,28 @@ def editar_restaurante(request):
         restaurante = Restaurante.objects.get(user=request.user)
     except Restaurante.DoesNotExist:
         return redirect('error')
-
+    
     if request.method == 'POST':
         print("Datos enviados:", request.POST)
         form = RestauranteForm(request.POST, request.FILES, instance=restaurante)
         if form.is_valid():
             print("Formulario válido")
             restaurante = form.save(commit=False)
-
+            
             imagen = form.cleaned_data.get('foto')
-
+            
             if imagen:
                 # Redimensionar la imagen
                 img = Image.open(imagen)
                 img = img.resize((600, 600), Image.LANCZOS)
                 if img.mode in ('RGBA', 'P'):
                     img = img.convert('RGB')
-
+                    
                 # Guardar la imagen redimensionada en un objeto BytesIO
                 thumb_io = BytesIO()
                 img.save(thumb_io, format='JPEG')
                 thumb_io.seek(0)  # Asegúrate de estar en el inicio del archivo
-
+                
                 # Usar ContentFile para crear un nuevo archivo en memoria
                 nueva_imagen = ContentFile(thumb_io.read(), imagen.name)
                 restaurante.foto = nueva_imagen
@@ -474,14 +424,13 @@ def editar_restaurante(request):
         
         form = RestauranteForm(instance=restaurante)
         print("Errores de formulario:", form.errors)
-
-    return render(request, 'editar_restaurante.html', {'form': form})
-
+    return render(request, 'restaurante/editar_restaurante.html', {'form': form})
 
 @login_required
 def agregar_plato(request):
     # Lógica para la vista agregar_plato
     if request.method == "POST":
+        print("Datos enviados:", request.POST)
         nombre = request.POST["txtNombre"]
         descripcion = request.POST["txtDescripcion"]
         foto = request.FILES.get("imgFoto")  # Utiliza .get en lugar de ['imgFoto']
@@ -489,33 +438,34 @@ def agregar_plato(request):
         precio = request.POST["txtPrecio"]
         ingrediente = request.POST["txtIngrediente"]
         instruccion = request.POST["txtInstruccion"]
-
+        
         # Asegúrate de que el usuario esté autenticado y sea un restaurante
         if request.user.is_authenticated:
             try:
                 restaurante = request.user.restaurante
             except Restaurante.DoesNotExist:
-                 return redirect('error')  # o donde quieras redirigir a los usuarios que no son restaurantes
-
+                return redirect('error')  # o donde quieras redirigir a los usuarios que no son restaurantes
+            
             # Verifica si se seleccionó una imagen
-            if foto is not None:  
+            if foto is not None:
+                print("Archivo de imagen recibido:", foto.name)  
                 # Abre la imagen y la redimensiona
                 img = Image.open(foto)
                 img = img.resize((600, 600), Image.LANCZOS)
                 if img.mode in ('RGBA', 'P'):
                     img = img.convert('RGB')
-
+                    
                 # Guarda la imagen redimensionada en un objeto BytesIO
                 thumb_io = BytesIO()
                 img.save(thumb_io, format='JPEG')
-
-                # Crea un nuevo Django File con la imagen redimensionada
-                foto = ContentFile(thumb_io.getvalue(), foto.name)
+                
+                
             else:
+                print("No se ha recibido una imagen.")
                 # Si no se selecciona ninguna imagen, asigna una imagen por defecto
-                with open('imagenes/platos/default.png','rb') as default_image:
+                with open('media/default/default_plato.png','rb') as default_image:
                     foto = ContentFile(default_image.read(), 'imagen_por_defecto.jpg')
-
+                    
             # Crea y guarda el objeto Plato
             plato = Plato(
                 nombre=nombre,
@@ -528,56 +478,44 @@ def agregar_plato(request):
                 instruccion=instruccion
             )
             plato.save()
-
+            
             return redirect("listar_plato")
-
-    return render(request, "platos/agregar_plato.html")
+    return render(request, "restaurante/agregar_plato.html")
 
 @login_required
 def editar_plato(request, plato_id):
     plato = get_object_or_404(Plato, id=plato_id)
-
-    # Asegúrate de que el usuario esté autenticado y sea el dueño del plato
-    if request.user.is_authenticated and plato.restaurante == request.user.restaurante:
-        if request.method == "POST":
-            plato.nombre = request.POST["txtNombre"]
-            plato.descripcion = request.POST["txtDescripcion"]
-            foto = request.FILES.get("imgFoto")  # Utiliza .get en lugar de ['imgFoto']
-            video = request.FILES.get("imgVideo")  # Obtiene el video subido
-            precio = request.POST["txtPrecio"].replace(",", ".")
-            plato.ingrediente = request.POST["txtIngrediente"]
-            plato.instruccion = request.POST["txtInstruccion"]
-            
-            
-            plato.precio = precio
-
-            if foto is not None:  # Verifica si se seleccionó un archivo
-                # Abre la imagen y la redimensiona
-                
+    # Verificar que el usuario es el propietario del plato
+    if plato.restaurante != request.user.restaurante:
+        return redirect('error')  # Redirigir a la página de error si no es el dueño del plato
+    if request.method == "POST":
+        form = PlatoForm(request.POST, request.FILES, instance=plato)  # Pasa los archivos al formulario
+        if form.is_valid():
+            # Procesar la imagen si se ha subido una nueva
+            foto = request.FILES.get("imgFoto")
+            if foto:
                 img = Image.open(foto)
                 img = img.resize((600, 600), Image.LANCZOS)
-                if img.mode in ('RGBA', 'P'):  # Añade 'RGBA' a la lista
+                if img.mode in ('RGBA', 'P'):
                     img = img.convert('RGB')
-
-                # Guarda la imagen redimensionada en un objeto BytesIO
+                    
+                    
                 thumb_io = BytesIO()
                 img.save(thumb_io, format='JPEG')
-
-                # Crea un nuevo Django File con la imagen redimensionada
+                # Crea un nuevo archivo de contenido para la imagen
                 foto = ContentFile(thumb_io.getvalue(), foto.name)
-                plato.foto = foto
-        
-            if video is not None:  # Verifica si se seleccionó un video
-                plato.video = video  # Guarda el video en el plato
-            
-
-            plato.save()
+                form.instance.foto = foto  # Asignar la nueva imagen al campo de la foto
+            # Procesar el video si se ha subido uno nuevo
+            video = request.FILES.get("imgVideo")
+            if video:
+                form.instance.video = video  # Asignar el nuevo video al campo de video
+            # Guardar el formulario, lo que actualizará el objeto `plato`
+            form.save()
             return redirect("listar_plato")
-
+        
     else:
-        return redirect('error')  # o donde quieras redirigir a los usuarios que no son dueños del plato
-
-    return render(request, "platos/editar_plato.html", {"Plato": plato})
+        form = PlatoForm(instance=plato)  # Cargar los datos existentes en el formulario
+    return render(request, "restaurante/editar_plato.html", {"form": form, "plato": plato})
 
 @login_required
 def listar_plato(request):
@@ -586,42 +524,36 @@ def listar_plato(request):
             restaurante = request.user.restaurante
         except Restaurante.DoesNotExist:
             return redirect('error')  # o donde quieras redirigir a los usuarios que no son restaurantes
-
+        
         platos = Plato.objects.filter(restaurante=restaurante)  # Filtrar los platos por el restaurante
-        return render(request, "platos/listar_plato.html", {"platos": platos})
-
+        return render(request, "restaurante/listar_plato.html", {"platos": platos})
     return redirect('login')  # Redirige a los usuarios no autenticados a la página de inicio de sesión
-
-def listar_plato_to_mobile(request):
-    platos = Plato.objects.all()
-    data = serializers.serialize("json", platos, fields=("nombre", "descripcion"))
-    return HttpResponse(data)
 
 @login_required
 def eliminar_plato(request, plato_id):
     plato = get_object_or_404(Plato, id=plato_id)
-
+    
     # Asegúrate de que el usuario esté autenticado y sea el dueño del plato
     if request.user.is_authenticated and plato.restaurante == request.user.restaurante:
         plato.delete()
         return redirect("listar_plato")
-
+    
     else:
         return render(request,"error.html",{"mensaje": "No se encontró el plato con el id especificado o no tienes permiso para eliminarlo"},)
     
 @login_required
 def crear_evento(request):
-    if request.method == 'POST':
-        form = EventoGastronomicoForm(request.POST)
-        if form.is_valid():
-            evento = form.save(commit=False)
-            evento.restaurante = request.user.restaurante
-            evento.save()
-            return redirect('crear_evento')
-    else:
-        form = EventoGastronomicoForm()
-
-    return render(request, 'crear_evento.html', {'form': form})
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = EventoGastronomicoForm(request.POST, request.FILES)
+            if form.is_valid():
+                evento = form.save(commit=False)
+                evento.restaurante = request.user.restaurante
+                evento.save()
+                return redirect('listar_evento')
+        else:
+            form = EventoGastronomicoForm()
+    return render(request, 'restaurante/crear_evento.html', {'form': form})
 
 @login_required
 def listar_evento(request):
@@ -630,16 +562,15 @@ def listar_evento(request):
             restaurante = request.user.restaurante
         except Restaurante.DoesNotExist:
             return redirect('error')  # o donde quieras redirigir a los usuarios que no son restaurantes
-
+        
         evento = EventoGastronomico.objects.filter(restaurante=restaurante)  # Filtrar los platos por el restaurante
-        return render(request, "listar_evento.html", {"evento": evento})
-
+        return render(request, "restaurante/listar_evento.html", {"evento": evento})
     return redirect('login') 
 
 @login_required
 def editar_evento(request, evento_id):
     evento = get_object_or_404(EventoGastronomico, id=evento_id)
-
+    
     # Asegúrate de que el usuario esté autenticado y sea el dueño del evento
     if request.user.is_authenticated and evento.restaurante == request.user.restaurante:
         if request.method == "POST":
@@ -648,31 +579,30 @@ def editar_evento(request, evento_id):
                 form.save()
                 return redirect("listar_evento")
         else:
+            evento.fecha_inicio = evento.fecha_inicio.strftime('%Y-%m-%d')  
+            evento.fecha_fin = evento.fecha_fin.strftime('%Y-%m-%d')
             form = EventoGastronomicoForm(instance=evento)
     else:
         return redirect('error')  # o donde quieras redirigir a los usuarios que no son dueños del evento
-
-    return render(request, "editar_evento.html", {"form": form})  
+    return render(request, "restaurante/editar_evento.html", {"form": form})  
 
 @login_required
 def eliminar_evento(request, evento_id):
     evento = get_object_or_404(EventoGastronomico, id=evento_id)
-
-    # Asegúrate de que el usuario esté autenticado y sea el dueño del evento
+    
+    # Asegúrate de que el usuario esté autenticado y sea el dueño del plato
     if request.user.is_authenticated and evento.restaurante == request.user.restaurante:
-        if request.method == "POST":
-            evento.delete()
-            return redirect("listar_evento")
-
+        evento.delete()
+        return redirect("listar_evento")
     else:
-        return redirect('error')  # o donde quieras redirigir a los usuarios que no son dueños del evento
-
-    return render(request, "eliminar_evento.html", {"evento": evento})
+        return render(request,"error.html",{"mensaje": "No se encontró el plato con el id especificado o no tienes permiso para eliminarlo"},)
+    
+# buscar dashboard
 @login_required
 def buscar_dashboard(request):
     query = request.GET.get('q')
     results = []
-
+    
     if query:
         # Definir las posibles rutas y sus nombres amigables
         search_map = {
@@ -681,24 +611,12 @@ def buscar_dashboard(request):
             'editar restaurante': reverse('editar_restaurante'),
             # Agregar más rutas según sea necesario
         }
-
+        
         # Buscar coincidencias en las claves del mapa de búsqueda
         for key, url in search_map.items():
             if query.lower() in key:
                 results.append((key, url))
-
-    return render(request, 'buscar_dashboard.html', {'query': query, 'results': results})
-
-def historia(request):
-    # Lógica para la vista historia
-    return render(request, "t_gastronomico/historia.html")
-
-def cultura(request):
-    # Lógica para la vista cultura
-    return render(request, "t_gastronomico/cultura.html")
-
-
-@login_required
+    return render(request, 'restaurante/buscar_dashboard.html', {'query': query, 'results': results})
 def obtener_calificaciones(request):
     if request.method == 'GET':
         turista_id = request.GET.get('turista_id')

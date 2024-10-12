@@ -1,0 +1,136 @@
+{% extends "base_dashboard.html" %}
+
+{% block titulo %}Agregar Plato - Sabbor Andino{% endblock titulo %}
+
+{% block meta %}
+<meta name="description" content="Agrega un nuevo plato a Sabbor Andino y comparte lo mejor de la gastronomía de la Laguna de la Cocha.">
+<meta name="keywords" content="agregar plato, Sabbor Andino, gastronomía, Laguna de la Cocha, recetas, comida típica, platos andinos">
+{% endblock %}
+
+{% block contenido %}
+<div class="content-wrapper">
+  <!-- Content -->
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Basic Layout -->
+    <div class="row justify-content-center">
+      <!-- Centro -->
+      <div class="col-md-6">
+        <div class="card mb-4">
+          
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Agregar Plato</h5>
+            <small class="text-muted float-end">....</small>
+          </div>
+
+          <div class="card-body">
+            <!-- Formulario -->
+            <form action="{% url 'agregar_plato' %}" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label class="form-label" for="txtNombre">Nombre del Plato</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-fullname2" class="input-group-text"><i class="bx bx-dish"></i></span>
+                  <input
+                    type="text"
+                    name="txtNombre"
+                    class="form-control"
+                    id="txtNombre"
+                    placeholder="Introduce el nombre del plato"
+                    aria-label="Nombre del plato"
+                    aria-describedby="basic-icon-default-fullname2"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="txtDescripcion">Descripción del Plato</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-file"></i></span>
+                  <textarea
+                    id="txtDescripcion"
+                    name="txtDescripcion"
+                    class="form-control"
+                    placeholder="Escribe la descripción del plato"
+                    aria-label="Descripción del plato"
+                    aria-describedby="basic-icon-default-message2"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="txtIngrediente">Ingredientes del Plato</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-book-content"></i></span>
+                  <textarea
+                    id="txtIngrediente"
+                    name="txtIngrediente"
+                    class="form-control"
+                    placeholder="Lista de ingredientes"
+                    aria-label="Ingredientes del plato"
+                    aria-describedby="basic-icon-default-message2"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="txtInstruccion">Instrucciones de Preparación</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-message2" class="input-group-text"><i class="bx bx-food-menu"></i></span>
+                  <textarea
+                    id="txtInstruccion"
+                    name="txtInstruccion"
+                    class="form-control"
+                    placeholder="Escribe las instrucciones de preparación"
+                    aria-label="Instrucciones de preparación"
+                    aria-describedby="basic-icon-default-message2"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="imgFoto">Imagen del Plato</label>
+                <div class="input-group mb-3">
+                  <input accept="image/*" type="file" name="imgFoto" class="form-control" id="imgFoto" required />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="imgVideo">Video del Plato</label>
+                <div class="input-group mb-3">
+                  <input accept="video/*" type="file" name="imgVideo" class="form-control" id="imgVideo" />
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="txtPrecio">Precio del Plato</label>
+                <div class="input-group input-group-merge">
+                  <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-money"></i></span>
+                  <input
+                    type="number"
+                    name="txtPrecio"
+                    id="txtPrecio"
+                    class="form-control"
+                    placeholder="Valor del plato"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Agregar</button>
+              <a class="btn btn-outline-secondary" href="{% url "listar_plato" %}">Cancelar</a>
+            </form>
+          </div>
+
+        </div>
+      </div>
+      <!-- Fin Centro -->
+    </div>
+  </div>
+  <!-- / Content -->
+  <div class="content-backdrop fade"></div>
+</div>
+{% endblock contenido %}

@@ -26,16 +26,12 @@ urlpatterns = [
     # Ruta para la página de inicio
     path("", views.index, name="index"),
     path("acerca_de/", views.acerca_de, name="acerca_de"),
-    path("cultura/", views.cultura, name="cultura"),
-    path("historia/", views.historia, name="historia"),
     path("app/", views.app, name="app"),
     path("error/", views.error, name="error"),
     
     path("signup/", views.signup, name="signup"),
     path("login/", views.login, name="login"),
     path("logout/", views.logout, name="logout"),
-    path("base/", views.base, name="base"),
-    
     
     path("index_turista", views.index_turista, name="index_turista"),
     path("calificacion/", views.calificacion, name="calificacion"),
@@ -51,12 +47,10 @@ urlpatterns = [
     
    
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("index_dashboard/", views.index_dashboard, name="index_dashboard"),
     path("editar_restaurante/", views.editar_restaurante, name="editar_restaurante"),
     path("agregar/", views.agregar_plato, name="agregar_plato"),
     path("editar/<int:plato_id>/", views.editar_plato, name="editar_plato"),
     path("listar/", views.listar_plato, name="listar_plato"),
-    path("listar2/", views.listar_plato_to_mobile, name="listar_plato_to_mobile"),
     path("eliminar/<int:plato_id>/", views.eliminar_plato, name="eliminar_plato"),
     path("crear_evento/", views.crear_evento, name="crear_evento"),
     path("listar_evento/", views.listar_evento, name="listar_evento"),
@@ -64,6 +58,9 @@ urlpatterns = [
     path("eliminar_evento/<int:evento_id>/", views.eliminar_evento, name="eliminar_evento"),
     path("buscar_dashboard/", views.buscar_dashboard, name="buscar_dashboard"),
     
+    
+    path("signup/turista/<int:user_id>/", views.complete_turista, name="complete_turista"),
+    path("signup/restaurante/<int:user_id>/", views.complete_restaurante, name="complete_restaurante"),
     
     
     

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from t_gastronomico.views import Plato
 from t_gastronomico.views import Restaurante
-from .models import Turista
+from .models import Turista,Plato,Restaurante
 
 # Register your models here.
 admin.site.register(Plato)

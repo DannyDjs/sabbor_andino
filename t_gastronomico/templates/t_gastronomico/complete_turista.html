@@ -1,0 +1,56 @@
+{% extends "base_pagina.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block titulo %}Registro Turista - Sabbor Andino{% endblock titulo %}
+
+{% block meta %}
+<meta name="description"
+    content="Regístrate en Sabbor Andino, la plataforma ideal para turistas y restaurantes en la Laguna de la Cocha. Conectamos gastronomía y aventuras.">
+<meta name="keywords" content="Sabbor Andino, registro, turista, restaurante, Laguna de la Cocha, gastronomía, recetas">
+{% endblock %}
+
+{% block contenido %}
+<!-- Content -->
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div>
+            <!-- Register Card -->
+            <div class="card ">
+                <div class="card-body " style="max-height: 650px; overflow-y: auto;">
+                    <!-- Logo -->
+                    <div class="text-center mb-4">
+                        <img src="{% static 'img/iconoSaborAndino.png' %}" alt="Logo de Sabbor Andino" class="img-fluid"
+                            style="max-width: 90px;">
+                    </div>
+                    <!-- /Logo -->
+                    <h4 class="mb-2 text-center">¡Completa Tu Aventura!</h4> <!-- Cambié h4 a h1 -->
+                    <p class="mb-4 text-center">Cuéntanos más sobre ti para disfrutar al máximo.</p>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in turista_form %}
+                        <div class="form-group mb-3">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field|add_class:"form-control" }}
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                        <div>
+                            <button id="submitButton" class="btn btn-primary d-grid w-100">Completar Registro</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Register Card -->
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
+{% block js %}
+{% endblock js %}

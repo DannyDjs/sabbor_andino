@@ -1,0 +1,96 @@
+{% extends "base_pagina.html" %}
+{% load static %}
+
+{% block titulo %}Registro Turista - Sabbor Andino{% endblock titulo %}
+
+{% block meta %}
+<meta name="description"
+    content="Regístrate en Sabbor Andino, la plataforma ideal para turistas y restaurantes en la Laguna de la Cocha. Conectamos gastronomía y aventuras.">
+<meta name="keywords" content="Sabbor Andino, registro, turista, restaurante, Laguna de la Cocha, gastronomía, recetas">
+{% endblock %}
+
+{% block contenido %}
+<!-- Content -->
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div>
+            <!-- Register Card -->
+            <div class="card">
+                <div class="card-body" style="max-height: 650px; overflow-y: auto;">
+                    <!-- Aquí se agrega el scroll -->
+                    <!-- Logo -->
+                    <div class="text-center mb-4">
+                        <img src="{% static 'img/iconoSaborAndino.png' %}" alt="Logo de Sabbor Andino" class="img-fluid"
+                            style="max-width: 90px;">
+                    </div>
+                    <!-- /Logo -->
+                    <h4 class="mb-2 text-center">¡Potencia Tu Restaurante!</h4>
+                    <p class="mb-4 text-center">Ayúdanos a conocerte mejor y a destacar tus sabores.</p>
+
+                    <form method="POST" enctype="multipart/form-data">
+                        {% load widget_tweaks %}
+                        {% csrf_token %}
+                        {% for field in restaurante_form %}
+                        <div class="form-group mb-3">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {% if field.name == 'ubicacion' %}
+                            <button type="button" onclick="obtenerUbicacion()"
+                                class="btn btn-primary d-grid w-100">Obtener
+                                Ubicación Actual</button>
+                            <input type="hidden" name="ubicacion" id="ubicacion">
+                            <div id="map" style="height: 180px;"></div>
+                            {% else %}
+                            {{ field|add_class:"form-control" }}
+                            {% if field.help_text %}
+                            <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+
+                        {{ restaurante_form.ubicacion }}
+
+                        <div>
+                            <button id="submitButton" class="btn btn-primary d-grid w-100">Completar
+                                Registro</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <!-- Register Card -->
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}
+
+{% block js %}
+<script>
+    function obtenerUbicacion() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var lat = position.coords.latitude.toFixed(6);
+                var lng = position.coords.longitude.toFixed(6);
+                var ubicacion = JSON.stringify({
+                    'latitud': lat,
+                    'longitud': lng
+                });
+                document.getElementById('ubicacion').value = ubicacion;
+                // Mostrar la ubicación en un mapa (por ejemplo, Leaflet)
+                var map = L.map('map').setView([lat, lng], 15);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+                L.marker([lat, lng]).addTo(map);
+            });
+        } else {
+            alert('Tu navegador no soporta la geolocalización.');
+        }
+    }
+</script>
+{% endblock js %}
