@@ -1,0 +1,282 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="es" class="light-style layout-menu-fixed customizer-hide" dir="ltr" data-theme="theme-default"
+    data-assets-path="{% static '' %} " data-template="vertical-menu-template-free">
+
+<head>
+    {% block meta %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% endblock meta %}
+
+    <title>{% block titulo %} {% endblock titulo %}</title>
+    {% block css %}
+    
+    {% endblock css %}
+
+        
+    <!-- Icono -->
+    <link rel="icon" type="image/x-icon" href="{% static 'img/icono.ico' %} " />
+
+    <!-- ESTILOS INDEX  -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %} ">
+    <link rel="stylesheet" href="{% static 'css/templatemo.css' %} ">
+    
+    <!-- Load fonts style after rendering the layout styles -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+    <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %} ">
+    <!-- Slick -->
+    <link rel="stylesheet" type="text/css" href=" {% static 'css/slick.min.css' %} ">
+    <link rel="stylesheet" type="text/css" href=" {% static 'css/slick-theme.css' %} ">
+
+    <!-- estilos index  -->
+
+    <!-- Load fonts style after rendering the layout styles -->
+
+    <!-- estilo autenicacion  -->
+    <link rel="stylesheet" href="{% static 'css/demo.css' %} " />
+    <link rel="stylesheet" href="{% static 'vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'vendor/css/pages/page-auth.css' %}" />
+    <link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %} " />
+    <link rel="stylesheet" href="{% static 'vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %} " />
+    <!-- Helpers -->
+
+    <!-- Geolocalizacion  -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+</head>
+
+<body onload="obtenerUbicacion()">
+
+    {% block navbar %}
+    {% if user.is_authenticated and request.session.user_type == 'turista' %}
+    <!-- Aquí va tu barra de navegación para turistas -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a href="{% url "index" %}">
+                <img src="{% static 'img/iconoSaborAndino.png' %}" alt="logo cochapp" style="width: 100px;">
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                id="templatemo_main_nav">
+                <div class="col-10 flex-fill">
+                    <ul class="nav navbar d-flex justify-content-center mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "index" %}">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "restaurantes" %}">Restaurantes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "platos" %}">Platos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "eventos" %}">Eventos Gastronomico</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "acerca_de" %}">Sobre la cocha</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "app" %}">App movil</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- Example single danger button -->
+
+                <a class="nav-link" href="{% url "logout" %}">Cerrar sesion</a>
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <!-- Aquí va tu barra de navegación normal -->
+    <nav class="navbar navbar-expand-lg navbar-light shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand text-success logo h1 align-self-center" href="{% url "index" %}">
+
+                <img src="{% static 'img/iconoSaborAndino.png' %}" alt="logo cochapp" style="width: 100px;">
+
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between"
+                id="templatemo_main_nav">
+                <div class="col-10 flex-fill">
+                    <ul class="nav navbar d-flex justify-content-center mx-lg-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "index" %}">Inicio</a>
+                        </li>
+                        <!--<li class="nav-item">
+                            <a class="nav-link" href="{% url "restaurantes" %}">Restaurantes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "platos" %}">Platos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "eventos" %}">Eventos Gastronomico</a>
+                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "acerca_de" %}">Sobre la cocha</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "app" %}">App movil</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- Example single danger button -->
+                <div class="navbar align-self-center d-flex">
+
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false" aria-haspopup="true">
+                            Ingresar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url "signup" %}">Registro</a></li>
+                            <div class="dropdown-divider"></div>
+                            <li><a class="dropdown-item" href="{% url "login" %}">Inicio sesion</a></li>
+
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </nav>
+    <!-- Modal -->
+    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="w-100 pt-1 mb-5 text-right">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="searchForm" action="/buscar/" method="get" class="modal-content modal-body border-0 p-0">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Buscar ...">
+                    <button type="submit" class="input-group-text bg-success text-light">
+                        <i class="fa fa-fw fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+
+            <div id="resultadosBusqueda"></div>
+        </div>
+    </div>
+    {% endif %}
+    {% endblock navbar %}
+
+    {% block contenido %}
+    {% endblock contenido %}
+
+    <footer>
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <p style="margin-bottom: 0;">&copy; 2024 Saboor Andino - Todos los derechos reservados.</p>
+            <a href="#" style="color: #28a745;">Contáctanos</a>
+        </div>
+    </footer>
+    
+
+    <!-- SCRIPT INDEX -->
+    <!-- Start Script -->
+    <script src="{% static 'js/jquery-1.11.0.min.js' %} "></script>
+    <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %} "></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %} "></script>
+    <script src="{% static 'js/templatemo.js' %} "></script>
+    <script src="{% static 'js/custom.js' %} "></script>
+    <!-- End Script -->
+    <!-- Start Slider Script -->
+    <script src=" {% static 'js/slick.min.js' %} "></script>
+    <script>
+        $('#carousel-related-product').slick({
+            infinite: true,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 3,
+            dots: true,
+            responsive: [{
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                        slidesToScroll: 1
+                    }
+                }
+            ]
+        });
+    </script>
+    <!-- End Script -->
+
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="{% static 'vendor/js/helpers.js' %} "></script>
+    <script src="{% static 'js/config.js' %} "></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#searchForm').on('submit', function(event) {
+                event.preventDefault(); // Previene que el formulario se envíe de la forma tradicional
+                var query = $('#inputModalSearch').val();
+                $.ajax({
+                    url: '/buscar/',
+                    data: {
+                        'q': query
+                    },
+                    success: function(data) {
+                        $('#resultadosBusqueda').empty();
+                        if (data.length === 0) {
+                            $('#resultadosBusqueda').html(
+                                '<p>No se encontraron resultados.</p>');
+                        } else {
+                            data.forEach(function(item) {
+                                $('#resultadosBusqueda').append('<div><h2>' + item
+                                    .nombre + '</h2><p>Tipo: ' + item.tipo +
+                                    '</p></div>');
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="{% static 'js/cochap.js' %} "></script>
+    {% block js %}
+
+    {% endblock js %}
+</body>
+
+</html>

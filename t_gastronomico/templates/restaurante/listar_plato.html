@@ -1,0 +1,119 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block titulo %}Listado de Platos - Sabbor Andino{% endblock titulo %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+{% endblock css %}
+
+{% block meta %}
+<!-- Meta etiquetas para SEO -->
+<meta name="description" content="Descubre los deliciosos platos típicos de nuestra región. Encuentra la mejor gastronomía local en nuestro listado.">
+<meta name="keywords" content="platos, gastronomía, cocina local, comida típica, restaurantes">
+{% endblock meta %}
+{% block contenido %}
+
+<div class="content-wrapper">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="col-xl">
+      <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Platos Disponibles</h5>
+          <small class="text-muted float-end">Descripción del listado</small>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Foto</th>
+                <th>Video</th>
+                <th>Precio</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for Plato in platos %}
+              <tr onclick="window.location.href='{% url "editar_plato" Plato.id %}'"
+              style="cursor:pointer;">
+                <td class="col-2">
+                  {{ Plato.nombre }}
+                </td>
+                <td class="col-5">
+                  {{ Plato.descripcion }}
+                </td>
+                <td class="col-1">
+                  <img src="{{ Plato.foto.url }}" alt="{{ Plato.nombre }} - Plato típico" class="img-fluid" height="50">
+                </td>
+                <td >
+                  {% if Plato.video %}
+                    <span class="text-success" style="font-size: 1.5em;"><i class="fas fa-check-circle"></i></span> <!-- Ícono de visto -->
+                  {% else %}
+                    <span class="text-danger" style="font-size: 1.5em;"><i class="fas fa-times-circle"></i></span> <!-- Ícono de X -->
+                  {% endif %}
+                </td>
+                <td>{{ Plato.precio }}</td>
+                <td class="acciones center col-1" onclick="event.stopPropagation();">
+                  <div class="dropdown text-center">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                        onclick="setDeleteFormAction('{% url 'eliminar_plato' Plato.id %}')">
+                        <i class="bx bx-trash me-2"></i> Eliminar
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6" class="text-center">No hay Platos disponibles.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <!-- Modal de confirmación para eliminación -->
+          <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ¿Estás seguro de que deseas eliminar este plato?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <form id="delete-form" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock contenido %}
+
+{% block javascript %}
+<script>
+  function setDeleteFormAction(action) {
+    const form = document.getElementById('delete-form');
+    form.action = action;
+  }
+</script>
+{% endblock javascript %}

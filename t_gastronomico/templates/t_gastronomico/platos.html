@@ -1,8 +1,10 @@
-{% extends "base.html" %}
+{% extends "base_pagina.html" %}
 {% load static %}
-
 {% block titulo %}Platos tipicos{% endblock titulo %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 't_gastronomico/css/styles.css' %}" />
+{% endblock css %}
 {% block contenido %}
 <!-- Start Featured Product -->
 <section class="bg-light">
@@ -24,8 +26,7 @@
             <div class="col-12 col-md-3 mb-4">
                 <div class="card h-100" style="border:3px solid #4CAF50; border-radius: 10px;">
                     <a href="{% url 'plato_detalle' plato.id %}">
-                        <img src="{{ plato.foto.url }}" class="card-img-top " alt="{{ plato.nombre }}" >
-                        
+                        <img src="{{ plato.foto.url }}" class="img-fluid mb-3 card-img-top "  alt="{{ plato.nombre }}" loading="lazy">
                     </a>
                     <div class="card-body">
                         
@@ -48,8 +49,6 @@
                                 <li class="text-muted text-right">${{ plato.precio }}</li>
                             </ul>
                             <a class="h2 text-decoration-none text-dark">{{ plato.nombre }}</a>
-                            
-                            <p class="text-muted">Reseñas (24)</p>
                         
                     </div>
                 </div>

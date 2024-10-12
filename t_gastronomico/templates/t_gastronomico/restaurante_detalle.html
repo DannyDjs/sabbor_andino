@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_pagina.html" %}
 
 {% block titulo %}Detalle restaurante{% endblock titulo %}
 
@@ -66,17 +66,8 @@
             <div class="col-lg-7 mt-5">
                 <div class="card">
                     <div class="card-body" >
-                        <h1 class="h2">{{ restaurante.nombre }}</h1>
-                        <p class="py-2">
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-warning"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            
-                        </p>
+                        <h1 class="h2 py-3">{{ restaurante.nombre }}</h1>
                         
-
                         <h6>Description:</h6>
                         <p>{{ restaurante.descripcion }}</p>
 
@@ -113,8 +104,10 @@
                 
                 <div class="product-wap card rounded-0 ">
                     <div class="card rounded-0">
-                        <img class="card-img rounded-0 img-fluid" src="{{ plato.foto.url }}">
-                        
+                        <a href="{% url 'plato_detalle' plato.id %}">
+                            <img src="{{ plato.foto.url }}" class="card-img-top " alt="{{ plato.nombre }}" >
+                            
+                        </a>
                     </div>
                     <div class="card-body">
                         <a href="shop-single.html" class="h3 text-decoration-none">{{ plato.nombre }}</a>

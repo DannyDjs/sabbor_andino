@@ -1,7 +1,12 @@
-{% extends "base.html" %}
+{% extends "base_pagina.html" %}
 {% load static %}
 
-{% block titulo %}Login{% endblock titulo %}
+{% block titulo %}Iniciar Sesión - Sabbor Andino{% endblock titulo %}
+
+{% block meta %}
+<meta name="description" content="Inicia sesión en Sabbor Andino y descubre los mejores platos de la Laguna de la Cocha. Conéctate con la gastronomía local.">
+<meta name="keywords" content="Sabbor Andino, inicio de sesión, gastronomía, Laguna de la Cocha, platos típicos">
+{% endblock %}
 
 {% block contenido %}
 
@@ -14,18 +19,18 @@
         <div class="card-body">
           <!-- Logo -->
           <div class="text-center mb-4">
-            <img src="{% static 'img/iconoSaborAndino.png' %}" alt="Logo" class="img-fluid" style="max-width: 90px;">
+            <img src="{% static 'img/iconoSaborAndino.png' %}" alt="Logo de Sabbor Andino" class="img-fluid" style="max-width: 90px;">
           </div>
           <!-- /Logo -->
-          <h4 class="mb-2 text-center">Bienvenid@ a Saboor Andino</h4>
-          <!-- <p class="mb-4">Inicia sesión y despierta tus sentidos con cada plato.</p> -->
+          <h4 class="mb-2 text-center">Bienvenid@ a Sabbor Andino</h4>
+          <p class="mb-4 text-center">Inicia sesión y despierta tus sentidos con cada plato.</p>
           
           <form id="formAuthentication" class="mb-3" action="{% url "login" %}" method="POST">
             {% csrf_token %}
             <div class="mb-3">
               <label for="{{form.username.id_for_label}}" class="form-label">Usuario</label>
               <input type="text" class="form-control" id="email" name="{{form.username.name}}"
-                placeholder="Introduce tu Usuario" autofocus />
+                placeholder="Introduce tu Usuario" autofocus required />
               <span>{{form.username.errors}}</span>
             </div>
             <div class="mb-3 form-password-toggle">
@@ -34,13 +39,12 @@
               </div>
               <div class="input-group input-group-merge">
                 <input type="password" id="password" class="form-control" name="{{form.password.name}}"
-                  placeholder="Introduce tu contraseña"
-                  aria-describedby="password" />
+                  placeholder="Introduce tu contraseña" aria-describedby="password" required />
               </div>
-              <span><i class="bx bx-hide">{{form.password.errors}}</i></span>
+              <span>{{form.password.errors}}</span>
             </div>
             <div class="mb-3">
-              <button class="btn btn-primary d-grid w-100" type="submit">Iniciar sesion</button>
+              <button class="btn btn-primary d-grid w-100" type="submit">Iniciar sesión</button>
             </div>
           </form>
 

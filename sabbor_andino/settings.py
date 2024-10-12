@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wyv1#-z7@e(4l7c-e7a_sh)pdtern#=-q4rg@jr3)&6638kt=i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['saboorandino.online','www.saboorandino.online','127.0.0.1','54.205.97.178']
 
@@ -89,6 +89,7 @@ DATABASES = {
         'USER': 'admin',  # Cambia esto por tu usuario
         #'USER': 'root',  # Cambia esto por tu usuario
         'PASSWORD': 'sabborandino',  # Cambia esto por tu contraseña
+        #'PASSWORD': '',  # Cambia esto por tu contraseña
         'HOST': 'db-sabborandino.crooga6kwiil.us-east-1.rds.amazonaws.com',
         #'HOST': 'localhost',
         'PORT': '3306',
@@ -120,9 +121,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Bogota'
 
 USE_I18N = True
 

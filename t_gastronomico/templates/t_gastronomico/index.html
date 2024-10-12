@@ -1,0 +1,158 @@
+{% extends "base_pagina.html" %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 't_gastronomico/css/styles.css' %}" />
+{% endblock css %}
+
+{% block meta %}
+<meta name="description" content="Bienvenido a La Cocha, un paraíso natural donde la belleza paisajística se fusiona con la riqueza culinaria. Explora nuestros platos típicos y tradiciones.">
+{% endblock meta %}
+
+{% block titulo %}Sabbor Andino - Gastronomía de la Laguna de la Cocha{% endblock titulo %}
+{% block contenido %}
+<!-- Modal -->
+<div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="" method="get" class="modal-content modal-body border-0 p-0">
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Buscar ...">
+                <button type="submit" class="input-group-text bg-success text-light">
+                    <i class="fa fa-fw fa-search text-white"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Start Banner Hero -->
+<section id="banner-hero">
+    <div id="template-mo-zay-hero-carousel" class="carousel slide" data-bs-ride="carousel" aria-label="Carrusel de Bienvenida">
+        <ol class="carousel-indicators">
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="1"></li>
+            <li data-bs-target="#template-mo-zay-hero-carousel" data-bs-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{% static 'img/index/carusel1.jpg' %}" alt="Bienvenido a La Cocha" loading="lazy">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left align-self-center">
+                                <h1 class="h1 text-success">Bienvenido a La Cocha</h1>
+                                <h2 class="h2 text-success">Sumérgete en una experiencia gastronómica</h2>
+                                <p>
+                                    "Bienvenido a la Laguna de la Cocha, un paraíso natural donde la belleza paisajística se fusiona con la riqueza culinaria. 
+                                    En nuestra página web, te invitamos a explorar los deliciosos secretos que guarda nuestra región en cada bocado. 
+                                    Desde la frescura de los pescados locales hasta la tradición de los platos típicos, 
+                                    cada experiencia gastronómica es un viaje sensorial que deleitará tu paladar y enriquecerá tu alma."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Otras diapositivas -->
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{% static 'img/index/carusel2.jpg' %}" alt="Aromas de la Tradición" loading="lazy">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h2 class="h2 text-success">"Los Aromas de la Tradición en la Mesa"</h2>
+                                <h3 class="h3 text-success">"Descubre la esencia de nuestra cultura a través de la gastronomía."</h3>
+                                <p>
+                                    Sumérgete en una experiencia culinaria que te conecta con nuestras raíces ancestrales. 
+                                    En la Laguna de la Cocha, cada comida es una celebración de la historia y la tradición de nuestra comunidad. 
+                                    Desde el aroma tentador de las hierbas frescas hasta la calidez de platos preparados con amor.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="container">
+                    <div class="row p-5">
+                        <div class="mx-auto col-md-8 col-lg-6 order-lg-last">
+                            <img class="img-fluid" src="{% static 'img/index/carusel3.jpg' %}" alt="Esencia Cultural" loading="lazy">
+                        </div>
+                        <div class="col-lg-6 mb-0 d-flex align-items-center">
+                            <div class="text-align-left">
+                                <h2 class="h2 text-success">"Explora la Esencia Cultural de la Laguna de la Cocha"</h2>
+                                <h3 class="h3 text-success">"Sumérgete en la riqueza de nuestras tradiciones y costumbres."</h3>
+                                <p>
+                                    En la Laguna de la Cocha, la cultura es el corazón latente que da vida a cada rincón de nuestra región. 
+                                    Desde las danzas ancestrales hasta las artesanías únicas, cada aspecto de nuestra cultura refleja la belleza 
+                                    y la diversidad de nuestra comunidad. 
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev text-decoration-none w-auto ps-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="prev">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <a class="carousel-control-next text-decoration-none w-auto pe-3" href="#template-mo-zay-hero-carousel" role="button" data-bs-slide="next">
+            <i class="fas fa-chevron-right"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Sección de Video -->
+<section id="video" class="py-3 ">
+    <div class="container">
+        <!-- Contenedor del video con diseño responsivo -->
+        <div class="video-container" style="text-align:center; margin:20px;">
+            <!-- Título llamativo del video -->
+            <h2 class="text-center text-success mb-4 animate__animated animate__fadeIn">Empieza tu Viaje Gastronómico</h2>
+            
+            <!-- Contenedor con imagen de portada y hover interactivo -->
+            <div class="video-wrapper" style="position: relative; max-width: 100%; margin: auto;">
+                <video controls width="100%" style="border-radius: 10px;" >
+                    <source src="{% static 'video/sabbor_andino.mp4' %}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Breve descripción o frase motivadora debajo del video -->
+            <p class="mt-4 text-muted animate__animated animate__fadeInUp">Descubre la magia gastronómica de la Laguna de la Cocha en nuestra aplicacion movil.</p>
+
+            <!-- Botón CTA con animación -->
+            <a href="{% url "app" %}" class="btn btn-success btn-lg mt-3 animate__animated animate__fadeInUp">
+                ¡Explora Más!
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Galería de Imágenes -->
+<section id="galeria" class="py-4 bg-light">
+    <div class="container">
+        <h2 class="text-center text-success">Galería de Imágenes</h2>
+        <div class="row py-4">
+            <div class="col-md-4">
+                <img src="{% static 'img/plato1.jpg' %}" class="img-fluid mb-3" alt="Plato Típico 1" loading="lazy">
+            </div>
+            <div class="col-md-4">
+                <img src="{% static 'img/plato2.jpg' %}" class="img-fluid mb-3" alt="Plato Típico 2" loading="lazy">
+            </div>
+            <div class="col-md-4">
+                <img src="{% static 'img/plato3.jpg' %}" class="img-fluid mb-3" alt="Plato Típico 3" loading="lazy">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock contenido %}
