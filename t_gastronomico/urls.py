@@ -4,6 +4,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework  import routers
 from rest_framework.authtoken.views import obtain_auth_token
+from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
+
 #enrutador
 
 router = routers.DefaultRouter()
@@ -18,7 +21,6 @@ router.register(r'resena',views.ReseñaViewSet)
 
 
 # urls.py
-
 urlpatterns = [
     path ('api/',include(router.urls)),
     path('api-token-auth/', views.CustomAuthToken.as_view(), name='api_token_auth'),
@@ -32,6 +34,18 @@ urlpatterns = [
     path("signup/", views.signup, name="signup"),
     path("login/", views.login, name="login"),
     path("logout/", views.logout, name="logout"),
+    # Ruta para solicitar la recuperación de contraseña
+     # URL para solicitar un restablecimiento de contraseña
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='registration/contraseña/password_reset.html'), name='password_reset'),
+    
+    # URL que se muestra después de enviar el formulario de restablecimiento de contraseña
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/contraseña/password_reset_done.html'), name='password_reset_done'),
+    
+    # URL para confirmar el restablecimiento de la contraseña
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='registration/contraseña/password_reset_confirm.html'), name='password_reset_confirm'),
+    
+    # URL que se muestra después de cambiar la contraseña
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/contraseña/password_reset_complete.html'), name='password_reset_complete'),
     
     path("index_turista", views.index_turista, name="index_turista"),
     path("calificacion/", views.calificacion, name="calificacion"),
@@ -45,7 +59,6 @@ urlpatterns = [
     path('eventos/', views.eventos, name='eventos'),
     path('obtener_eventos/', views.obtener_eventos, name='obtener_eventos'),
     
-   
     path("dashboard/", views.dashboard, name="dashboard"),
     path("editar_restaurante/", views.editar_restaurante, name="editar_restaurante"),
     path("agregar/", views.agregar_plato, name="agregar_plato"),
@@ -61,12 +74,7 @@ urlpatterns = [
     
     path("signup/turista/<int:user_id>/", views.complete_turista, name="complete_turista"),
     path("signup/restaurante/<int:user_id>/", views.complete_restaurante, name="complete_restaurante"),
-    
-    
-    
-    
-    
-    
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")), 
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

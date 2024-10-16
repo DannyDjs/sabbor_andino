@@ -1,15 +1,13 @@
 {% extends "base_pagina.html" %}
 {% load static %}
-
-{% block css %}
-<link rel="stylesheet" href="{% static 't_gastronomico/css/styles.css' %}" />
-{% endblock css %}
-
 {% block meta %}
 <meta name="description" content="Bienvenido a La Cocha, un paraíso natural donde la belleza paisajística se fusiona con la riqueza culinaria. Explora nuestros platos típicos y tradiciones.">
 {% endblock meta %}
-
 {% block titulo %}Sabbor Andino - Gastronomía de la Laguna de la Cocha{% endblock titulo %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+{% endblock css %}
 {% block contenido %}
 <!-- Modal -->
 <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

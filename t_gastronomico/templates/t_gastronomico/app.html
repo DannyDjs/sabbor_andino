@@ -2,34 +2,45 @@
 {% load static %}
 
 {% block meta %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Descarga la aplicación móvil Sabbor Andino y descubre la deliciosa gastronomía de la Laguna de la Cocha. Encuentra restaurantes, platos típicos y mucho más.">
-    <meta name="keywords" content="aplicación móvil, gastronomía, Laguna de la Cocha, descargar, restaurantes, platos típicos, app culinaria, Sabbor Andino">
-    <meta name="author" content="Sabbor Andino">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description"
+    content="Descarga la aplicación móvil Sabbor Andino y descubre la deliciosa gastronomía de la Laguna de la Cocha. Encuentra restaurantes, platos típicos y mucho más.">
+<meta name="keywords"
+    content="aplicación móvil, gastronomía, Laguna de la Cocha, descargar, restaurantes, platos típicos, app culinaria, Sabbor Andino">
+<meta name="author" content="Sabbor Andino">
 {% endblock meta %}
 
 {% block titulo %}Aplicación Móvil - Sabbor Andino{% endblock titulo %}
 
 {% block contenido %}
 <!-- Start App Section -->
-<div class="container-fluid py-5" style="background-image: url('{% static 'img/laguna_cocha.jpg' %}'); background-size: cover; background-position: center; position: relative;">
-    <div class="overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);"></div> <!-- Capa oscurecedora -->
+<div class="container-fluid py-5"
+    style="background-image: url('{% static 'img/laguna_cocha.jpg' %}'); background-size: cover; background-position: center; position: relative;">
+    <div class="overlay"
+        style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.5);"></div>
+    <!-- Capa oscurecedora -->
     <div class="row align-items-center position-relative">
         <div class="col-md-6 text-center">
-            <img src="{% static 'img/mockups.png' %}" alt="Mockup de la Aplicación Móvil Sabbor Andino" class="img-fluid" style="max-width: 40%; margin: 0 auto; display: block;">
+            <img src="{% static 'img/mockups.png' %}" alt="Mockup de la Aplicación Móvil Sabbor Andino"
+                class="img-fluid" style="max-width: 40%; margin: 0 auto; display: block;">
         </div>
         <div class="col-md-6 text-white" style="padding: 0 15px;">
             <div style="padding: 70px;">
                 <h2>¡Descarga nuestra Aplicación Móvil!</h2>
                 <p style="text-align: justify;">
-                    ¡Explora la exquisita gastronomía de la Laguna de la Cocha al instante con nuestra app! Encuentra los mejores restaurantes y platos típicos, ubica cada lugar fácilmente en nuestro mapa interactivo y disfruta de videos que muestran cómo se preparan tus recetas favoritas.
+                    ¡Explora la exquisita gastronomía de la Laguna de la Cocha al instante con nuestra app! Encuentra
+                    los mejores restaurantes y platos típicos, ubica cada lugar fácilmente en nuestro mapa interactivo y
+                    disfruta de videos que muestran cómo se preparan tus recetas favoritas.
                 </p>
                 <p style="text-align: justify;">
-                    Además, mantente al tanto de emocionantes eventos gastronómicos y comparte tus experiencias al calificar los platos que pruebes. ¡No esperes más! Descarga nuestra app y vive la mejor aventura culinaria que la Laguna de la Cocha tiene para ofrecerte.
+                    Además, mantente al tanto de emocionantes eventos gastronómicos y comparte tus experiencias al
+                    calificar los platos que pruebes. ¡No esperes más! Descarga nuestra app y vive la mejor aventura
+                    culinaria que la Laguna de la Cocha tiene para ofrecerte.
                 </p>
-                
-                <a href="{% static 'downloads/Sabbor_Andino.apk' %}" download class="btn btn-success btn-lg download-btn">
+
+                <a href="{% static 'downloads/Sabbor_Andino.apk' %}" download
+                    class="btn btn-success btn-lg download-btn">
                     <i class="fas fa-download"></i> Descargar APK
                 </a>
             </div>
@@ -45,13 +56,13 @@
         opacity: 0;
         transform: translateY(20px);
     }
-    
+
     .text-white p {
         animation: fadeInUp 0.7s ease forwards;
         opacity: 0;
         transform: translateY(20px);
     }
-    
+
     .text-white a {
         animation: fadeInUp 0.9s ease forwards;
         opacity: 0;
@@ -72,35 +83,48 @@
     }
 
     @keyframes moveBackground {
-        0% { background-position: 0 0; }
-        100% { background-position: 0 100%; }
+        0% {
+            background-position: 0 0;
+        }
+
+        100% {
+            background-position: 0 100%;
+        }
     }
 
     /* Estilo para el botón */
     .download-btn {
         position: relative;
         transition: all 0.3s ease;
-        padding: 10px 20px; /* Padding estándar */
-        font-size: 1.2rem; /* Tamaño de fuente estándar */
+        padding: 10px 20px;
+        /* Padding estándar */
+        font-size: 1.2rem;
+        /* Tamaño de fuente estándar */
     }
 
     .download-btn:hover {
-        transform: scale(1.1); /* Aumentar el tamaño del botón al hacer hover */
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Resplandor blanco */
-        text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.5); /* Resplandor en el texto */
+        transform: scale(1.1);
+        /* Aumentar el tamaño del botón al hacer hover */
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        /* Resplandor blanco */
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.5);
+        /* Resplandor en el texto */
     }
 
     .download-btn i {
-        margin-right: 5px; /* Espacio entre el ícono y el texto */
-        transition: transform 0.3s ease; /* Transición suave para el ícono */
+        margin-right: 5px;
+        /* Espacio entre el ícono y el texto */
+        transition: transform 0.3s ease;
+        /* Transición suave para el ícono */
     }
 
     .download-btn:hover i {
-        transform: scale(1.2); /* Aumentar el tamaño del ícono al hacer hover */
+        transform: scale(1.2);
+        /* Aumentar el tamaño del ícono al hacer hover */
     }
 </style>
 
 <!-- Agregar Font Awesome en tu base.html si aún no lo tienes -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 {% endblock contenido %}

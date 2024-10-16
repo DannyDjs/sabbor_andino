@@ -15,8 +15,6 @@
     {% block css %}
     
     {% endblock css %}
-
-        
     <!-- Icono -->
     <link rel="icon" type="image/x-icon" href="{% static 'img/icono.ico' %} " />
 
@@ -183,7 +181,15 @@
     </div>
     {% endif %}
     {% endblock navbar %}
-
+    <!-- Mostrar mensajes -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    
     {% block contenido %}
     {% endblock contenido %}
 
