@@ -1,0 +1,17 @@
+
+/* Asegúrate que el clic en la columna de acciones no redirija a la página de edición */
+.acciones {
+    pointer-events: default; /* Evita que el clic se registre en esta celda */
+}
+/* Estilo para la galería */
+#galeria img {
+    transition: transform 0.3s ease-in-out; /* Suaviza la transición */
+    border-radius: 10px; /* Bordes redondeados para las imágenes */
+    width: 100%; /* Asegura que las imágenes ocupen toda la columna */
+}
+
+/* Efecto de zoom cuando el usuario pasa el mouse */
+#galeria img:hover {
+    transform: scale(1.1); /* La imagen se agranda un 10% */
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); /* Sombra para dar efecto de elevación */
+}
