@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wyv1#-z7@e(4l7c-e7a_sh)pdtern#=-q4rg@jr3)&6638kt=i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['saboorandino.online','www.saboorandino.online','127.0.0.1','54.205.97.178']
 
@@ -168,6 +168,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+# Agrega tu client_id de Google
+GOOGLE_CLIENT_ID = '673254272405-jjqg4auheiuui9b2hi1otd3f0rpkf3kd.apps.googleusercontent.com'
+
 
 # Configuración de JWT
 SIMPLE_JWT = {

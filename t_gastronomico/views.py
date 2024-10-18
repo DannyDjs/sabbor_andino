@@ -29,10 +29,38 @@ from .serializers import UserSerializer,PlatoSerializer,RestauranteSerializer,Ev
 from .models import Plato,Restaurante,Turista,Reseña,EventoGastronomico,User,Turista
 from .forms import CustomUserCreationForm, PlatoForm, RestauranteForm, TuristaForm,EventoGastronomicoForm
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.decorators import api_view
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from django.contrib.auth.hashers import make_password
+import re
+from rest_framework.authtoken.models import Token
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+@api_view(['POST'])
+def google_login(request):
+    id_token_str = request.data.get('id_token')
+    
+    try:
+        # Verifica el token de ID
+        idinfo = id_token.verify_oauth2_token(id_token_str, requests.Request(), 'GOOGLE_CLIENT_ID')
+        email = idinfo['email']
+        
+        user, created = User.objects.get_or_create(email=email)
+
+        if created:
+            # Lógica para crear un nuevo usuario si no existe
+            user.username = email  # Puedes asignar un nombre de usuario o algo similar
+            user.save()
+            Turista.objects.create(user=user, Tnombre=user.username)
+
+        # Retorna el token de acceso y el ID del usuario
+        return Response({'access': user.auth_token.key, 'user_id': user.id})  # Asegúrate de tener un token de autenticación
+    except ValueError:
+        return Response({'error': 'Invalid token'}, status=400)
     
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -135,6 +163,11 @@ class ReseñaViewSet(viewsets.ModelViewSet):
         return queryset
     
 #####################################################                              AUTENTICACION                             #############################################
+def get_version(request):
+    return JsonResponse({
+        'version': '1.0.0',  # Cambia esto a la última versión
+        'apk_url': 'https://www.saboorandino.online/static/downloads/sabbor_andino_v1.apk',  # Cambia la URL al APK correcto
+    })
 
 def login(request):
     if request.method == "POST":
@@ -168,6 +201,54 @@ def logout(request):
     auth_logout(request)
     # Redirige al usuario a la página de inicio o login tras cerrar sesión
     return redirect("login")
+
+@csrf_exempt
+def register_turista(request):
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            first_name = body.get('first_name')
+            email = body.get('email')
+            password = body.get('password')
+
+            # Validar los campos requeridos
+            if not first_name or not email or not password:
+                return JsonResponse({'success': False, 'message': 'Todos los campos son obligatorios'}, status=400)
+
+            # Validar el correo electrónico
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                return JsonResponse({'success': False, 'message': 'Correo electrónico inválido'}, status=400)
+
+            # Verificar si el correo ya está registrado
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({'success': False, 'message': 'El correo ya está registrado'}, status=400)
+
+            # Crear el usuario
+            user = User.objects.create(
+                username=email,
+                email=email,
+                first_name=first_name,
+                password=make_password(password)  # Hashear la contraseña
+            )
+            user.save()
+
+            # Crear el perfil de Turista
+            turista = Turista.objects.create(
+                user=user,
+                Tnombre=user.first_name,
+                Tcorreo=user.email,
+            )
+            turista.save()
+
+            # Devolver una respuesta de éxito
+            return JsonResponse({'success': True, 'message': 'Usuario registrado exitosamente'}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Error al procesar JSON'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'message': 'Método no permitido'}, status=405)
 
 def signup(request):
     user_form = UserCreationForm()

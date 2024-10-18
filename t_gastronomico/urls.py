@@ -24,6 +24,9 @@ router.register(r'resena',views.ReseñaViewSet)
 urlpatterns = [
     path ('api/',include(router.urls)),
     path('api-token-auth/', views.CustomAuthToken.as_view(), name='api_token_auth'),
+    path('api/google-login/', views.google_login, name='google_login'),
+    path('api/register_turista/', views.register_turista, name='register_turista'),
+    path('api/version/', views.get_version, name='get_version'),
 
     # Ruta para la página de inicio
     path("", views.index, name="index"),
